@@ -1,28 +1,30 @@
 # 水印大师 · Vue 产品网站
 
-从 `photo-watermark/web` 迁移的 Vue 3 + TypeScript + Vite 网站，动画采用 Motion 官方 Vue 包 `motion-v`。保留紫灰配色、全部八款水印样例、交互工作台、隐私政策和反馈邮箱 `lemonpaimc@163.com`。
+从 `photo-watermark/web` 迁移的 Vue 3 + TypeScript + Vite 单页网站，路由采用 vue-router hash 模式，动画采用 Motion 官方 Vue 包 `motion-v`。保留紫灰配色、全部八款水印样例、交互工作台、隐私政策和反馈邮箱 `lemonpaimc@163.com`。
 
 ## 本地运行
 
 ```sh
-cd /Users/fred/work/photo-watermark-site/vite-project
+cd /Users/fred/work/photo-watermark-site
 pnpm install
 pnpm dev
 ```
 
-开发首页：`http://localhost:5173/`，隐私页：`http://localhost:5173/privacy.html`。
+开发首页：`http://localhost:5173/#/`，隐私页：`http://localhost:5173/#/privacy`。
 
 ```sh
 pnpm lint        # Vue / TypeScript 的 ESLint 检查
 pnpm typecheck   # vue-tsc
 pnpm build       # 类型检查并生成 dist/
 pnpm preview     # 预览生产构建
-pnpm exec prettier --check src index.html privacy.html vite.config.ts eslint.config.js
+pnpm exec prettier --check src index.html vite.config.ts eslint.config.js
 ```
 
 ## 实现结构
 
-- `src/App.vue` / `src/PrivacyApp.vue`：首页与隐私页的 Vue 入口，共用导航、页脚与 Motion 配置。
+- `src/main.ts` / `src/App.vue`：唯一的 Vue 入口与应用布局，通过 `RouterView` 切换页面，共用导航、页脚与 Motion 配置。
+- `src/router/index.ts`：使用 `createWebHashHistory()`；首页为 `#/`，隐私页为 `#/privacy`（按需加载），未知路由返回首页。统一处理页面标题、描述、章节滚动和前进/后退位置恢复。
+- `src/components/MotionRouterLink.vue`：支持 Motion 动效的站内路由链接。
 - `src/components/HeroSection.vue`：首屏照片展开，使用 `motion` 和 `useSpring` 实现鼠标倾斜。
 - `src/components/StyleGallery.vue`：响应式筛选、布局过渡、原生 dialog 大图预览和 Motion 进出场。
 - `src/components/WatermarkPlayground.vue`：`reactive` 管理版式、文案、色调与饱和度，支持一键恢复。
@@ -37,7 +39,7 @@ pnpm exec prettier --check src index.html privacy.html vite.config.ts eslint.con
 
 ## 构建与部署
 
-采用 Vite 多页面构建，生成独立的 `dist/index.html` 和 `dist/privacy.html`。两页都由 Vue 实现，不需要服务器回退或 SPA 路由配置。`base: './'` 与统一资源 URL 使构建可以放在 GitHub Pages 仓库子路径或自定义域名下。
+采用 Vite SPA 构建，只生成一个 HTML 入口 `dist/index.html`。使用 hash 路由，直接打开或刷新 `#/privacy` 无需服务器回退配置；旧的 `privacy.html` 入口已移除，对外隐私政策链接应更新为 `/#/privacy`（仓库子路径下为 `/仓库名/#/privacy`）。站内章节链接采用 `#/#styles`、`#/privacy#photos` 等形式，由路由统一滚动定位。`base: './'` 与统一资源 URL 使构建可以放在 GitHub Pages 仓库子路径或自定义域名下。
 
 仓库根目录的 `.github/workflows/deploy-site-pages.yml` 会安装依赖、执行 lint 和生产构建，再上传 `vite-project/dist`。推送 `main` 且涉及 `vite-project/**` 或该 workflow 的变更会触发，也支持手动运行。
 

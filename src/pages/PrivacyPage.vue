@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink } from "vue-router";
 import { onMounted, onBeforeUnmount, ref } from "vue";
 const pageRoot = ref<HTMLElement>();
 const activeSection = ref("scope");
@@ -42,74 +43,74 @@ onBeforeUnmount(() => observer?.disconnect());
       <aside class="legal-toc" aria-label="政策目录">
         <p>阅读导航</p>
         <nav aria-label="隐私政策章节">
-          <a
-            href="#scope"
+          <RouterLink
+            :to="{ name: 'privacy', hash: '#scope' }"
             :class="{ 'is-active': activeSection === 'scope' }"
             :aria-current="activeSection === 'scope' ? 'location' : undefined"
-            >适用范围</a
-          ><a
-            href="#photos"
+            >适用范围</RouterLink
+          ><RouterLink
+            :to="{ name: 'privacy', hash: '#photos' }"
             :class="{ 'is-active': activeSection === 'photos' }"
             :aria-current="activeSection === 'photos' ? 'location' : undefined"
-            >照片与拍摄信息</a
-          ><a
-            href="#account"
+            >照片与拍摄信息</RouterLink
+          ><RouterLink
+            :to="{ name: 'privacy', hash: '#account' }"
             :class="{ 'is-active': activeSection === 'account' }"
             :aria-current="activeSection === 'account' ? 'location' : undefined"
-            >账号与购买</a
-          ><a
-            href="#diagnostics"
+            >账号与购买</RouterLink
+          ><RouterLink
+            :to="{ name: 'privacy', hash: '#diagnostics' }"
             :class="{ 'is-active': activeSection === 'diagnostics' }"
             :aria-current="
               activeSection === 'diagnostics' ? 'location' : undefined
             "
-            >故障诊断</a
-          ><a
-            href="#permissions"
+            >故障诊断</RouterLink
+          ><RouterLink
+            :to="{ name: 'privacy', hash: '#permissions' }"
             :class="{ 'is-active': activeSection === 'permissions' }"
             :aria-current="
               activeSection === 'permissions' ? 'location' : undefined
             "
-            >权限与选择</a
-          ><a
-            href="#storage"
+            >权限与选择</RouterLink
+          ><RouterLink
+            :to="{ name: 'privacy', hash: '#storage' }"
             :class="{ 'is-active': activeSection === 'storage' }"
             :aria-current="activeSection === 'storage' ? 'location' : undefined"
-            >存储与安全</a
-          ><a
-            href="#providers"
+            >存储与安全</RouterLink
+          ><RouterLink
+            :to="{ name: 'privacy', hash: '#providers' }"
             :class="{ 'is-active': activeSection === 'providers' }"
             :aria-current="
               activeSection === 'providers' ? 'location' : undefined
             "
-            >第三方与跨境处理</a
-          ><a
-            href="#website"
+            >第三方与跨境处理</RouterLink
+          ><RouterLink
+            :to="{ name: 'privacy', hash: '#website' }"
             :class="{ 'is-active': activeSection === 'website' }"
             :aria-current="activeSection === 'website' ? 'location' : undefined"
-            >网站访问</a
-          ><a
-            href="#rights"
+            >网站访问</RouterLink
+          ><RouterLink
+            :to="{ name: 'privacy', hash: '#rights' }"
             :class="{ 'is-active': activeSection === 'rights' }"
             :aria-current="activeSection === 'rights' ? 'location' : undefined"
-            >你的权利</a
-          ><a
-            href="#children"
+            >你的权利</RouterLink
+          ><RouterLink
+            :to="{ name: 'privacy', hash: '#children' }"
             :class="{ 'is-active': activeSection === 'children' }"
             :aria-current="
               activeSection === 'children' ? 'location' : undefined
             "
-            >未成年人保护</a
-          ><a
-            href="#updates"
+            >未成年人保护</RouterLink
+          ><RouterLink
+            :to="{ name: 'privacy', hash: '#updates' }"
             :class="{ 'is-active': activeSection === 'updates' }"
             :aria-current="activeSection === 'updates' ? 'location' : undefined"
-            >政策更新</a
-          ><a
-            href="#contact"
+            >政策更新</RouterLink
+          ><RouterLink
+            :to="{ name: 'privacy', hash: '#contact' }"
             :class="{ 'is-active': activeSection === 'contact' }"
             :aria-current="activeSection === 'contact' ? 'location' : undefined"
-            >联系我们</a
+            >联系我们</RouterLink
           >
         </nav>
         <div class="legal-contact">

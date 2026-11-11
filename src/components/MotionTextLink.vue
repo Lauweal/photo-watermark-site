@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { motion } from "motion-v";
 import { useSiteMotion } from "../composables/useSiteMotion";
+import type { RouteLocationRaw } from "vue-router";
+import MotionRouterLink from "./MotionRouterLink.vue";
 
-withDefaults(defineProps<{ href: string; arrow?: "diagonal" | "right" }>(), {
-  arrow: "diagonal",
-});
+withDefaults(
+  defineProps<{
+    href?: string;
+    to?: RouteLocationRaw;
+    arrow?: "diagonal" | "right";
+  }>(),
+  { arrow: "diagonal" },
+);
 const { reducedMotion, transition } = useSiteMotion();
 const arrowVariants = {
   rest: { x: 0, y: 0 },
@@ -13,7 +20,9 @@ const arrowVariants = {
 </script>
 
 <template>
-  <motion.a
+  <component
+    :is="to ? MotionRouterLink : motion.a"
+    :to="to"
     :href="href"
     class="text-link"
     initial="rest"
@@ -36,5 +45,5 @@ const arrowVariants = {
       :transition="{ ...transition, duration: reducedMotion ? 0 : 0.25 }"
       >↗</motion.span
     >
-  </motion.a>
+  </component>
 </template>

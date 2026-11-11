@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink } from "vue-router";
 import MotionTextLink from "./MotionTextLink.vue";
 import { reactive } from "vue";
 import { AnimatePresence, motion } from "motion-v";
@@ -86,7 +87,7 @@ const questions = [
               <p>
                 {{ item.answer
                 }}<template v-if="item.privacyLink"
-                  ><a href="privacy.html">隐私政策</a>。</template
+                  ><RouterLink to="/privacy">隐私政策</RouterLink>。</template
                 >
               </p>
             </div>

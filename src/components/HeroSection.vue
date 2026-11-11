@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { RouterLink } from "vue-router";
+import MotionRouterLink from "./MotionRouterLink.vue";
 import MotionTextLink from "./MotionTextLink.vue";
 import { onBeforeUnmount, watch } from "vue";
 import { motion, useSpring } from "motion-v";
@@ -51,16 +53,18 @@ onBeforeUnmount(() => {
         />一起装进画面里。
       </p>
       <div class="hero-actions">
-        <motion.a
+        <MotionRouterLink
           class="button button-purple"
-          href="#playground"
+          :to="{ name: 'home', hash: '#playground' }"
           :while-hover="hoverLift"
           :while-press="pressScale"
           :transition="transition"
           >亲手试一试
           <svg class="icon" aria-hidden="true">
-            <use href="#icon-arrow" /></svg></motion.a
-        ><MotionTextLink href="#styles">看看水印样式</MotionTextLink>
+            <use href="#icon-arrow" /></svg></MotionRouterLink
+        ><MotionTextLink :to="{ name: 'home', hash: '#styles' }"
+          >看看水印样式</MotionTextLink
+        >
       </div>
       <p class="hero-footnote">
         <svg class="icon" aria-hidden="true"><use href="#icon-lock" /></svg>
@@ -189,8 +193,10 @@ onBeforeUnmount(() => {
         <span>水印样式</span><span>拍摄信息</span><span>照片精修</span
         ><span>本地导出</span>
       </div>
-      <a href="#styles" aria-label="向下探索水印样式"
-        ><span aria-hidden="true">↓</span></a
+      <RouterLink
+        :to="{ name: 'home', hash: '#styles' }"
+        aria-label="向下探索水印样式"
+        ><span aria-hidden="true">↓</span></RouterLink
       >
     </div>
   </section>

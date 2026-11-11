@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { motion } from "motion-v";
+import { RouterLink } from "vue-router";
+import MotionRouterLink from "./MotionRouterLink.vue";
 import { asset } from "../lib/assets";
 import { useSiteMotion } from "../composables/useSiteMotion";
 withDefaults(defineProps<{ page?: "home" | "privacy" }>(), { page: "home" });
@@ -8,28 +9,30 @@ const { hoverLift, pressScale, transition } = useSiteMotion();
 
 <template>
   <header class="site-header" :class="{ 'legal-header': page === 'privacy' }">
-    <a class="brand" href="index.html" aria-label="水印大师首页"
+    <RouterLink class="brand" to="/" aria-label="水印大师首页"
       ><img :src="asset('icon.png')" width="36" height="36" alt="" /><span
         >水印大师</span
-      ></a
+      ></RouterLink
     >
     <template v-if="page === 'home'">
       <nav class="desktop-nav" aria-label="主导航">
-        <a href="#styles">水印美学</a><a href="#details">创作细节</a
-        ><a href="privacy.html">隐私政策</a>
+        <RouterLink :to="{ name: 'home', hash: '#styles' }">水印美学</RouterLink
+        ><RouterLink :to="{ name: 'home', hash: '#details' }"
+          >创作细节</RouterLink
+        ><RouterLink to="/privacy">隐私政策</RouterLink>
       </nav>
-      <motion.a
+      <MotionRouterLink
         class="button button-small button-dark"
-        href="#playground"
+        :to="{ name: 'home', hash: '#playground' }"
         :while-hover="hoverLift"
         :while-press="pressScale"
         :transition="transition"
         >体验水印
         <svg class="icon" aria-hidden="true"><use href="#icon-arrow" /></svg
-      ></motion.a>
+      ></MotionRouterLink>
     </template>
-    <a v-else class="back-link" href="index.html"
-      ><span aria-hidden="true">←</span> 返回产品首页</a
+    <RouterLink v-else class="back-link" to="/"
+      ><span aria-hidden="true">←</span> 返回产品首页</RouterLink
     >
   </header>
 </template>

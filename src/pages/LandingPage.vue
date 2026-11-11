@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MotionTextLink from "../components/MotionTextLink.vue";
-import { motion } from "motion-v";
+import MotionRouterLink from "../components/MotionRouterLink.vue";
 import HeroSection from "../components/HeroSection.vue";
 import StyleGallery from "../components/StyleGallery.vue";
 import WatermarkPlayground from "../components/WatermarkPlayground.vue";
@@ -32,7 +32,7 @@ const { hoverLift, pressScale, transition } = useSiteMotion();
           水印合成和照片精修在本机完成，照片不会由本应用上传。<br />照片访问、EXIF
           读取，由你决定。
         </p>
-        <MotionTextLink href="privacy.html" arrow="right"
+        <MotionTextLink to="/privacy" arrow="right"
           >了解我们如何处理数据</MotionTextLink
         >
       </div>
@@ -44,15 +44,15 @@ const { hoverLift, pressScale, transition } = useSiteMotion();
       </div>
       <p>下一张照片，留点不一样。</p>
       <h2 id="closing-title">让瞬间，有你的落款。</h2>
-      <motion.a
+      <MotionRouterLink
         class="button button-purple"
-        href="#playground"
+        :to="{ name: 'home', hash: '#playground' }"
         :while-hover="hoverLift"
         :while-press="pressScale"
         :transition="transition"
         >开始一场小小的创作
         <svg class="icon" aria-hidden="true">
-          <use href="#icon-arrow" /></svg></motion.a
+          <use href="#icon-arrow" /></svg></MotionRouterLink
       ><span class="closing-note">水印大师 · 为每一张你喜欢的照片</span>
     </section>
   </main>
