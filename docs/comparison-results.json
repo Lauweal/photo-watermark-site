@@ -1,0 +1,102 @@
+{
+  "date": "2026-11-11",
+  "home": [
+    {
+      "width": 1440,
+      "elements": 54,
+      "differences": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "elements": 54,
+      "differences": [],
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "elements": 54,
+      "differences": [],
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "elements": 54,
+      "differences": [],
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "elements": 54,
+      "differences": [],
+      "overflow": false
+    }
+  ],
+  "privacy": [
+    {
+      "width": 1440,
+      "differences": [],
+      "contentEqual": true
+    },
+    {
+      "width": 375,
+      "differences": [],
+      "contentEqual": true
+    }
+  ],
+  "galleryEqual": true,
+  "previewCombinationsEqual": true,
+  "inputEdgesEqual": true,
+  "typing": {
+    "original": {
+      "max": "18",
+      "value": "123456789012345678"
+    },
+    "vue": {
+      "max": "18",
+      "value": "123456789012345678"
+    }
+  },
+  "faq": {
+    "original": {
+      "answers": [
+        "基础套餐包含经典影像、哈苏签名、留白经典，以及照片信息编辑。Pro包含基础功能、更多专属水印样式和照片精修功能。具体权益与可购买方案以App内展示为准。",
+        "本应用不会上传你选择的照片，水印合成和精修均在设备本地进行。Apple登录、购买以及启用后的故障诊断可能涉及必要的网络通信，具体请查看隐私政策。"
+      ],
+      "count": 2
+    },
+    "vue": {
+      "answers": [
+        "基础套餐包含经典影像、哈苏签名、留白经典，以及照片信息编辑。Pro包含基础功能、更多专属水印样式和照片精修功能。具体权益与可购买方案以App内展示为准。",
+        "本应用不会上传你选择的照片，水印合成和精修均在设备本地进行。Apple登录、购买以及启用后的故障诊断可能涉及必要的网络通信，具体请查看隐私政策。"
+      ],
+      "count": 2
+    }
+  },
+  "faqGeometryDifferences": [],
+  "modalMaxGeometryDelta": 0.00054931640625,
+  "modalCloseAndFocus": {
+    "original": {
+      "focus": "经典影像",
+      "locked": false,
+      "open": false
+    },
+    "vue": {
+      "focus": "经典影像",
+      "locked": false,
+      "open": false
+    }
+  },
+  "backdropAndButton": {
+    "original": {
+      "closed": true,
+      "focus": "经典影像",
+      "unlocked": true
+    },
+    "vue": {
+      "closed": true,
+      "focus": "经典影像",
+      "unlocked": true
+    }
+  }
+}
