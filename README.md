@@ -41,7 +41,7 @@ pnpm exec prettier --check src index.html vite.config.ts eslint.config.js
 
 采用 Vite SPA 构建，只生成一个 HTML 入口 `dist/index.html`。使用 hash 路由，直接打开或刷新 `#/privacy` 无需服务器回退配置；旧的 `privacy.html` 入口已移除，对外隐私政策链接应更新为 `/#/privacy`（仓库子路径下为 `/仓库名/#/privacy`）。站内章节链接采用 `#/#styles`、`#/privacy#photos` 等形式，由路由统一滚动定位。`base: './'` 与统一资源 URL 使构建可以放在 GitHub Pages 仓库子路径或自定义域名下。
 
-仓库根目录的 `.github/workflows/deploy-site-pages.yml` 会安装依赖、执行 lint 和生产构建，再上传 `vite-project/dist`。推送 `main` 且涉及 `vite-project/**` 或该 workflow 的变更会触发，也支持手动运行。
+仓库根目录的 `.github/workflows/deploy-site-pages.yml` 会从根目录的 `package.json` 读取 `packageManager` 中的 pnpm 版本，安装依赖、执行 lint 和生产构建，再上传 `dist`。推送 `main` 时触发，也支持手动运行。
 
 首次部署仍需到仓库 **Settings → Pages → Source** 选择 **GitHub Actions**。默认 `GITHUB_TOKEN` 不用于首次创建 Pages 站点；不要只添加 `enablement: true` 来绕过设置。成功部署后，实际网址以 Actions 的 `github-pages` 环境输出为准。
 
