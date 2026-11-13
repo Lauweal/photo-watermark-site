@@ -1,30 +1,40 @@
 <script setup lang="ts">
-import { reactive, watch } from "vue";
+import { computed, reactive, watch } from "vue";
 import { motion, useAnimate } from "motion-v";
 import { asset } from "../lib/assets";
 import { useSiteMotion } from "../composables/useSiteMotion";
+import { useI18n } from "../i18n";
 
 type Layout = "classic" | "minimal" | "stamp";
 type Tone = "light" | "dark";
-const initialState = {
+const { messages } = useI18n();
+const initialState = computed(() => ({
   layout: "classic" as Layout,
   tone: "light" as Tone,
-  caption: "花开的时候",
+  caption: messages.value.playground.initialCaption,
   saturation: 100,
-};
-const state = reactive({ ...initialState });
+}));
+const state = reactive({ ...initialState.value });
 const [preview, animate] = useAnimate<HTMLElement>();
 let previewAnimation: ReturnType<typeof animate> | undefined;
-const layouts: { id: Layout; label: string }[] = [
-  { id: "classic", label: "经典" },
-  { id: "minimal", label: "留白" },
-  { id: "stamp", label: "邮票" },
-];
-const tones: { id: Tone; label: string }[] = [
-  { id: "light", label: "纸白" },
-  { id: "dark", label: "墨黑" },
-];
+const layouts = computed<{ id: Layout; label: string }[]>(() => [
+  { id: "classic", label: messages.value.playground.layoutClassic },
+  { id: "minimal", label: messages.value.playground.layoutMinimal },
+  { id: "stamp", label: messages.value.playground.layoutStamp },
+]);
+const tones = computed<{ id: Tone; label: string }[]>(() => [
+  { id: "light", label: messages.value.playground.toneLight },
+  { id: "dark", label: messages.value.playground.toneDark },
+]);
 const { reducedMotion, transition, pressScale } = useSiteMotion();
+
+// Keep the demo caption in sync with the locale while the user hasn't edited it.
+watch(
+  () => messages.value.playground.initialCaption,
+  (next, previous) => {
+    if (state.caption === previous) state.caption = next;
+  },
+);
 
 function animatePreview() {
   previewAnimation?.cancel();
@@ -45,9 +55,10 @@ watch(reducedMotion, (reduced) => {
     animate(preview.value, { opacity: 1, y: 0, rotate: -3 }, { duration: 0 });
 });
 function reset() {
+  const initial = initialState.value;
   const appearanceChanges =
-    state.layout !== initialState.layout || state.tone !== initialState.tone;
-  Object.assign(state, initialState);
+    state.layout !== initial.layout || state.tone !== initial.tone;
+  Object.assign(state, initial);
   if (!appearanceChanges) animatePreview();
 }
 </script>
@@ -60,15 +71,26 @@ function reset() {
   >
     <div class="section-heading">
       <div>
-        <p class="section-kicker">一点细节，很有你的感觉</p>
-        <h2 id="playground-title">你的照片。<br />你的表达方式。</h2>
+        <p class="section-kicker">{{ messages.playground.kicker }}</p>
+        <h2 id="playground-title">
+          {{ messages.playground.titleLines[0] }}<br />{{
+            messages.playground.titleLines[1]
+          }}
+        </h2>
       </div>
-      <p>换一种版式，写下一句话。<br />在这里，先感受水印的变化。</p>
+      <p>
+        <template
+          v-for="(line, index) in messages.playground.blurb.split('\n')"
+          :key="index"
+          ><br v-if="index > 0" />{{ line }}</template
+        >
+      </p>
     </div>
     <div class="playground">
       <div class="demo-stage">
         <span class="stage-label"
-          ><span aria-hidden="true"></span> 实时预览</span
+          ><span aria-hidden="true"></span> {{ messages.playground.stageLabel
+          }}</span
         >
         <div class="stage-grid" aria-hidden="true"></div>
         <motion.figure
@@ -87,33 +109,37 @@ function reset() {
               width="1280"
               height="1313"
               loading="lazy"
-              alt="用于体验水印的黄色与紫色花园照片"
+              :alt="messages.playground.photoAlt"
               :style="{ filter: `saturate(${state.saturation / 100})` }"
             />
           </div>
           <figcaption>
-            <span class="demo-brand">Photo diary</span
+            <span class="demo-brand">{{ messages.playground.demoBrand }}</span
             ><strong id="demo-title">{{
-              state.caption.trim() || "给时光一个落款"
+              state.caption.trim() || messages.playground.defaultCaption
             }}</strong
-            ><span class="demo-location">上海 · 某个晴天</span
+            ><span class="demo-location">{{
+              messages.playground.location
+            }}</span
             ><span class="demo-exif"
               >85mm &nbsp; f/2.5 &nbsp; 1/1667s &nbsp; ISO 100</span
             >
           </figcaption>
         </motion.figure>
-        <span class="stage-footnote">让一张照片，多一点自己的样子。</span>
+        <span class="stage-footnote">{{
+          messages.playground.stageFootnote
+        }}</span>
       </div>
       <form class="demo-controls" @submit.prevent>
         <div class="controls-heading">
           <svg class="icon" aria-hidden="true">
             <use href="#icon-sliders" />
           </svg>
-          <h3>水印工作台</h3>
-          <span>网页演示</span>
+          <h3>{{ messages.playground.controlsTitle }}</h3>
+          <span>{{ messages.playground.controlsBadge }}</span>
         </div>
         <fieldset>
-          <legend>选择一种版式</legend>
+          <legend>{{ messages.playground.layoutLegend }}</legend>
           <div class="layout-options">
             <motion.button
               v-for="layout in layouts"
@@ -136,19 +162,23 @@ function reset() {
         </fieldset>
         <div class="input-group">
           <label for="caption-input"
-            >给照片一句话 <span>{{ state.caption.length }} / 18</span></label
+            >{{ messages.playground.captionLabel }}
+            <span
+              >{{ state.caption.length }} /
+              {{ messages.playground.captionLimit }}</span
+            ></label
           ><input
             id="caption-input"
             v-model="state.caption"
             name="caption"
             type="text"
-            maxlength="18"
+            :maxlength="messages.playground.captionLimit"
             autocomplete="off"
             spellcheck="false"
           />
         </div>
         <fieldset class="tone-field">
-          <legend>画框色调</legend>
+          <legend>{{ messages.playground.toneLegend }}</legend>
           <div class="tone-options">
             <motion.button
               v-for="tone in tones"
@@ -171,7 +201,7 @@ function reset() {
         </fieldset>
         <div class="range-group">
           <label for="saturation"
-            >色彩饱和度
+            >{{ messages.playground.saturationLabel }}
             <output id="saturation-value" for="saturation"
               >{{ state.saturation }}%</output
             ></label
@@ -187,7 +217,8 @@ function reset() {
             :aria-valuetext="`${state.saturation}%`"
           />
           <div class="range-endpoints" aria-hidden="true">
-            <span>黑白</span><span>鲜明</span>
+            <span>{{ messages.playground.saturationLow }}</span
+            ><span>{{ messages.playground.saturationHigh }}</span>
           </div>
         </div>
         <motion.button
@@ -197,10 +228,11 @@ function reset() {
           :while-press="pressScale"
           :transition="transition"
           @click="reset"
-          >恢复初始效果 <span aria-hidden="true">↺</span></motion.button
+          >{{ messages.playground.reset }}
+          <span aria-hidden="true">↺</span></motion.button
         >
         <p class="demo-disclaimer">
-          此处展示版式与调色交互。完整样式、照片导入和导出，请在 App 内体验。
+          {{ messages.playground.disclaimer }}
         </p>
       </form>
     </div>

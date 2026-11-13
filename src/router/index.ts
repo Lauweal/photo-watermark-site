@@ -1,28 +1,16 @@
+import { watch } from "vue";
 import { createRouter, createWebHashHistory } from "vue-router";
+import { useI18n } from "../i18n";
 import LandingPage from "../pages/LandingPage.vue";
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
-    {
-      path: "/",
-      name: "home",
-      component: LandingPage,
-      meta: {
-        title: "水印大师 · 为照片，留下你的印记",
-        description:
-          "水印大师，为照片留下你的印记。探索经典影像、旅行邮票等八款水印，编辑拍摄信息，精修照片，在设备本地完成创作。",
-      },
-    },
+    { path: "/", name: "home", component: LandingPage },
     {
       path: "/privacy",
       name: "privacy",
       component: () => import("../pages/PrivacyPage.vue"),
-      meta: {
-        title: "隐私政策 · 水印大师",
-        description:
-          "了解水印大师如何处理照片、EXIF 拍摄信息、Apple 登录、应用内购买和故障诊断数据，以及如何联系我们管理你的信息。",
-      },
     },
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
@@ -49,11 +37,25 @@ const router = createRouter({
   },
 });
 
-router.afterEach((to) => {
-  document.title = String(to.meta.title);
+const { locale, messages } = useI18n();
+
+/** Keep the document title and social meta in sync with the active locale. */
+function applyMeta(page: unknown) {
+  const copy =
+    page === "privacy" ? messages.value.meta.privacy : messages.value.meta.home;
+  document.title = copy.title;
   document
-    .querySelector('meta[name="description"]')
-    ?.setAttribute("content", String(to.meta.description));
-});
+    .querySelector('meta[property="og:title"]')
+    ?.setAttribute("content", copy.title);
+  for (const selector of [
+    'meta[name="description"]',
+    'meta[property="og:description"]',
+  ]) {
+    document.querySelector(selector)?.setAttribute("content", copy.description);
+  }
+}
+
+router.afterEach((to) => applyMeta(to.name));
+watch(locale, () => applyMeta(router.currentRoute.value.name));
 
 export default router;

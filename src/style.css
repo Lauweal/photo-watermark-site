@@ -23,6 +23,46 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Language-aware typography. The <html lang> attribute is synced by the i18n
+   store, so these stacks pick the right faces for each locale's script. */
+html:lang(zh-Hant) {
+  --body:
+    "PingFang TC", "Hiragino Sans CNS", "Microsoft JhengHei", system-ui,
+    sans-serif;
+  --display:
+    Pliant, "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+
+html:lang(ja) {
+  --body:
+    "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Yu Gothic UI",
+    "Noto Sans JP", Meiryo, system-ui, sans-serif;
+  --display:
+    Pliant, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+}
+
+html:lang(ko) {
+  --body:
+    "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui,
+    sans-serif;
+  --display:
+    Pliant, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+}
+
+/* CJK scripts need a little more leading than the Latin default. */
+html:lang(ja) body,
+html:lang(ko) body {
+  line-height: 1.85;
+}
+
+html:lang(en) {
+  --body:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue",
+    Arial, sans-serif;
+  --display:
+    Pliant, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
 *,
 *::before,
 *::after {
@@ -212,6 +252,111 @@ summary {
 .desktop-nav a:hover,
 .site-footer a:hover {
   color: var(--purple);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.locale-switcher {
+  position: relative;
+}
+
+.locale-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 15px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+  transition:
+    border-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+}
+
+.locale-trigger:hover {
+  border-color: #d6d7e3;
+  box-shadow: 0 6px 18px #1717200f;
+}
+
+.locale-trigger .icon {
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+}
+
+.locale-trigger .locale-chevron {
+  width: 15px;
+  height: 15px;
+  margin-left: -2px;
+}
+
+.locale-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 30;
+  min-width: 190px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 20px 45px #1717201f;
+}
+
+.locale-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 13px;
+  text-align: left;
+}
+
+.locale-option:hover {
+  background: var(--paper);
+}
+
+.locale-option.is-active {
+  color: var(--purple);
+  font-weight: 600;
+}
+
+.locale-option .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--purple);
+}
+
+/* On narrow headers the language label collapses to an icon-only pill. */
+@media (max-width: 430px) {
+  .locale-trigger {
+    gap: 6px;
+    padding: 0 12px;
+  }
+
+  .locale-trigger > span {
+    display: none;
+  }
+
+  .locale-trigger .icon {
+    color: var(--ink);
+  }
 }
 
 .button {
@@ -1724,7 +1869,9 @@ input[type="range"]::-moz-range-thumb {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  font-size: 26px;
+  display: grid;
+  place-items: center;
+  padding: 0;
   line-height: 1;
 }
 
@@ -2851,9 +2998,6 @@ input[type="range"]::-moz-range-thumb {
   .dialog-close {
     right: 10px;
     top: 10px;
-    width: 44px;
-    height: 44px;
-    font-size: 25px;
   }
   .dialog-caption {
     padding: 18px 6px 8px;

@@ -2,11 +2,16 @@
 import { RouterLink } from "vue-router";
 import MotionRouterLink from "./MotionRouterLink.vue";
 import MotionTextLink from "./MotionTextLink.vue";
-import { onBeforeUnmount, watch } from "vue";
+import { computed, onBeforeUnmount, watch } from "vue";
 import { motion, useSpring } from "motion-v";
 import { asset } from "../lib/assets.js";
 import { useSiteMotion } from "../composables/useSiteMotion.js";
+import { useI18n } from "../i18n";
+const { messages } = useI18n();
 const { reducedMotion, transition, hoverLift, pressScale } = useSiteMotion();
+const descriptionLines = computed(() =>
+  messages.value.hero.description.split("\n"),
+);
 const rotateX = useSpring(0, { stiffness: 180, damping: 24 });
 const rotateY = useSpring(0, { stiffness: 180, damping: 24 });
 
@@ -42,15 +47,16 @@ onBeforeUnmount(() => {
     >
       <div class="intro-note">
         <span class="tiny-aperture" aria-hidden="true"></span>
-        献给每一次认真按下快门的你
+        {{ messages.hero.introNote }}
       </div>
       <h1 id="hero-title">
-        为照片，<br />留下你的印记<span class="title-period">。</span>
+        {{ messages.hero.titleLines[0] }}<br />{{ messages.hero.titleLines[1]
+        }}<span class="title-period">{{ messages.hero.titleMark }}</span>
       </h1>
       <p class="hero-description">
-        照片记住瞬间，水印留下故事。<br />把拍摄的参数、走过的地方和当时的心情，<br
-          class="desktop-break"
-        />一起装进画面里。
+        <template v-for="(line, index) in descriptionLines" :key="index"
+          ><br v-if="index > 0" />{{ line }}</template
+        >
       </p>
       <div class="hero-actions">
         <MotionRouterLink
@@ -59,23 +65,23 @@ onBeforeUnmount(() => {
           :while-hover="hoverLift"
           :while-press="pressScale"
           :transition="transition"
-          >亲手试一试
+          >{{ messages.hero.primaryCta }}
           <svg class="icon" aria-hidden="true">
             <use href="#icon-arrow" /></svg></MotionRouterLink
-        ><MotionTextLink :to="{ name: 'home', hash: '#styles' }"
-          >看看水印样式</MotionTextLink
-        >
+        ><MotionTextLink :to="{ name: 'home', hash: '#styles' }">{{
+          messages.hero.secondaryCta
+        }}</MotionTextLink>
       </div>
       <p class="hero-footnote">
         <svg class="icon" aria-hidden="true"><use href="#icon-lock" /></svg>
-        照片本地处理，创作安心一点。
+        {{ messages.hero.footnote }}
       </p>
     </motion.div>
     <div
       @pointermove="tiltPrint"
       @pointerleave="resetTilt"
       class="hero-art"
-      aria-label="水印大师作品展示"
+      :aria-label="messages.hero.artAria"
     >
       <div class="orbit orbit-one" aria-hidden="true"></div>
       <div class="orbit orbit-two" aria-hidden="true"></div>
@@ -94,7 +100,7 @@ onBeforeUnmount(() => {
           duration: reducedMotion ? 0 : 0.9,
           delay: reducedMotion ? 0 : 0.1,
         }"
-        ><span>属于你的影像记忆</span></motion.div
+        ><span>{{ messages.hero.backCaption }}</span></motion.div
       >
       <motion.div
         class="hero-photo-back back-stamp"
@@ -129,17 +135,17 @@ onBeforeUnmount(() => {
             width="1280"
             height="1313"
             fetchpriority="high"
-            alt="阳光下，黄色和紫色的花朵簇拥成一片花园"
+            :alt="messages.hero.photoAlt"
           />
         </div>
         <figcaption>
           <div class="print-topline">
-            <span class="print-title">花开的时候</span
+            <span class="print-title">{{ messages.hero.printTitle }}</span
             ><svg class="icon" aria-hidden="true">
               <use href="#icon-spark" />
             </svg>
           </div>
-          <span class="print-story">把这一刻，留在光里。</span
+          <span class="print-story">{{ messages.hero.printStory }}</span
           ><span class="print-exif"
             >85mm &nbsp; f/2.5 &nbsp; 1/1667s &nbsp; ISO 100</span
           >
@@ -160,8 +166,8 @@ onBeforeUnmount(() => {
           ><svg class="icon" aria-hidden="true">
             <use href="#icon-camera" /></svg></span
         ><span
-          ><small>照片里的小细节</small
-          ><strong>每一帧，都有来处。</strong></span
+          ><small>{{ messages.hero.tagSmall }}</small
+          ><strong>{{ messages.hero.tagStrong }}</strong></span
         ></motion.div
       >
       <motion.span
@@ -169,7 +175,7 @@ onBeforeUnmount(() => {
         :initial="reducedMotion ? false : { opacity: 0, y: 12, rotate: -5 }"
         :animate="{ opacity: 1, y: 0, rotate: -5 }"
         :transition="{ ...transition, delay: reducedMotion ? 0 : 0.6 }"
-        >好照片，值得一个落款。</motion.span
+        >{{ messages.hero.signature }}</motion.span
       >
       <motion.div
         class="art-stamp"
@@ -184,18 +190,25 @@ onBeforeUnmount(() => {
           delay: reducedMotion ? 0 : 0.6,
         }"
         ><svg class="icon"><use href="#icon-spark" /></svg
-        ><span>留住<br />此刻</span></motion.div
+        ><span
+          >{{ messages.hero.stampLines[0] }}<br />{{
+            messages.hero.stampLines[1]
+          }}</span
+        ></motion.div
       >
     </div>
     <div class="hero-bottom">
-      <span>用你喜欢的方式，<br /><strong>重新认识一张照片。</strong></span>
+      <span
+        >{{ messages.hero.bottomLead }}<br /><strong>{{
+          messages.hero.bottomLeadStrong
+        }}</strong></span
+      >
       <div>
-        <span>水印样式</span><span>拍摄信息</span><span>照片精修</span
-        ><span>本地导出</span>
+        <span v-for="chip in messages.hero.chips" :key="chip">{{ chip }}</span>
       </div>
       <RouterLink
         :to="{ name: 'home', hash: '#styles' }"
-        aria-label="向下探索水印样式"
+        :aria-label="messages.common.exploreStyles"
         ><span aria-hidden="true">↓</span></RouterLink
       >
     </div>

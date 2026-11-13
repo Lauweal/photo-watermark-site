@@ -5,7 +5,9 @@ import { RouterLink, RouterView, useRoute } from "vue-router";
 import IconSymbols from "./components/IconSymbols.vue";
 import SiteHeader from "./components/SiteHeader.vue";
 import SiteFooter from "./components/SiteFooter.vue";
+import { useI18n } from "./i18n";
 const route = useRoute();
+const { messages } = useI18n();
 const page = computed(() => (route.name === "privacy" ? "privacy" : "home"));
 </script>
 
@@ -19,7 +21,9 @@ const page = computed(() => (route.name === "privacy" ? "privacy" : "home"));
       class="skip-link"
       :to="{ name: page, hash: page === 'privacy' ? '#policy' : '#main' }"
       >{{
-        page === "privacy" ? "跳至隐私政策正文" : "跳至主要内容"
+        page === "privacy"
+          ? messages.common.skipToPolicy
+          : messages.common.skipToMain
       }}</RouterLink
     >
     <SiteHeader :page="page" />

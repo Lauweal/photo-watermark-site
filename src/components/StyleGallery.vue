@@ -8,21 +8,34 @@ import {
 } from "../data/watermarkStyles";
 import { asset } from "../lib/assets";
 import { useSiteMotion } from "../composables/useSiteMotion";
+import { interpolate, useI18n } from "../i18n";
+
+const { messages } = useI18n();
 
 type Filter = "all" | StyleTier;
 const filter = ref<Filter>("all");
-const filters: { id: Filter; label: string }[] = [
-  { id: "all", label: "全部样式" },
-  { id: "basic", label: "基础样式" },
-  { id: "pro", label: "Pro 样式" },
-];
+const filters = computed<{ id: Filter; label: string }[]>(() => [
+  { id: "all", label: messages.value.styles.filterAll },
+  { id: "basic", label: messages.value.styles.filterBasic },
+  { id: "pro", label: messages.value.styles.filterPro },
+]);
 const visibleStyles = computed(() =>
   watermarkStyles.filter(
     (style) => filter.value === "all" || style.tier === filter.value,
   ),
 );
 const filterLabel = computed(() =>
-  filter.value === "all" ? "全部" : filter.value === "basic" ? "基础" : "Pro",
+  filter.value === "all"
+    ? messages.value.styles.labelAll
+    : filter.value === "basic"
+      ? messages.value.styles.labelBasic
+      : messages.value.styles.labelPro,
+);
+const statusText = computed(() =>
+  interpolate(messages.value.styles.count, {
+    label: filterLabel.value,
+    count: visibleStyles.value.length,
+  }),
 );
 const selectedStyle = shallowRef<WatermarkStyle | null>(null);
 const dialog = ref<HTMLDialogElement>();
@@ -102,15 +115,27 @@ onBeforeUnmount(() => {
     <div class="page-width">
       <div class="section-heading">
         <div>
-          <p class="section-kicker">水印，是照片的另一种表达</p>
-          <h2 id="styles-title">同一个瞬间，<br />不止一种模样。</h2>
+          <p class="section-kicker">{{ messages.styles.kicker }}</p>
+          <h2 id="styles-title">
+            {{ messages.styles.titleLines[0] }}<br />{{
+              messages.styles.titleLines[1]
+            }}
+          </h2>
         </div>
         <p>
-          克制的留白，完整的拍摄参数，<br />或一张寄给自己的旅行邮票。<br />找到适合这张照片的那一个。
+          <template
+            v-for="(line, index) in messages.styles.blurb.split('\n')"
+            :key="index"
+            ><br v-if="index > 0" />{{ line }}</template
+          >
         </p>
       </div>
       <div class="gallery-toolbar">
-        <div class="filter-group" role="group" aria-label="按套餐筛选水印">
+        <div
+          class="filter-group"
+          role="group"
+          :aria-label="messages.styles.filterAria"
+        >
           <motion.button
             v-for="item in filters"
             :key="item.id"
@@ -127,7 +152,7 @@ onBeforeUnmount(() => {
           </motion.button>
         </div>
         <span class="gallery-hint"
-          >点开照片，看看细节 <span aria-hidden="true">↗</span></span
+          >{{ messages.styles.hint }} <span aria-hidden="true">↗</span></span
         >
       </div>
       <div class="style-gallery">
@@ -161,21 +186,23 @@ onBeforeUnmount(() => {
                 :width="style.width"
                 :height="style.height"
                 loading="lazy"
-                :alt="style.alt"
+                :alt="messages.styles.items[style.id].alt"
               /><span class="image-open" aria-hidden="true">↗</span>
             </div>
             <div class="style-caption">
-              <h3>{{ style.name }}</h3>
+              <h3>{{ messages.styles.items[style.id].name }}</h3>
               <span :class="{ 'pro-label': style.tier === 'pro' }">{{
-                style.tier === "pro" ? "Pro" : "基础"
+                style.tier === "pro"
+                  ? messages.styles.tierPro
+                  : messages.styles.tierBasic
               }}</span>
             </div>
-            <p>{{ style.tagline }}</p>
+            <p>{{ messages.styles.items[style.id].tagline }}</p>
           </motion.a>
         </AnimatePresence>
       </div>
       <p class="gallery-count" role="status" aria-live="polite">
-        正在展示{{ filterLabel }} {{ visibleStyles.length }} 款水印样式
+        {{ statusText }}
       </p>
     </div>
     <dialog
@@ -188,30 +215,42 @@ onBeforeUnmount(() => {
       @close="onDialogClosed"
       @click="onBackdropClick"
     >
-      <div v-if="selectedStyle" ref="dialogContent" class="dialog-content">
-        <motion.button
-          class="dialog-close"
-          type="button"
-          aria-label="关闭水印预览"
-          :while-press="pressScale"
-          :transition="transition"
-          @click="closePreview"
-          >×</motion.button
+      <button
+        class="dialog-close"
+        type="button"
+        :aria-label="messages.styles.closeAria"
+        @click="closePreview"
+      >
+        <svg
+          class="icon"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          focusable="false"
         >
+          <path d="m6 6 12 12M18 6 6 18" />
+        </svg>
+      </button>
+      <div v-if="selectedStyle" ref="dialogContent" class="dialog-content">
         <div class="dialog-image-wrap">
           <img
             id="dialog-image"
             :src="asset(selectedStyle.file)"
-            :alt="selectedStyle.alt"
+            :alt="messages.styles.items[selectedStyle.id].alt"
           />
         </div>
         <div class="dialog-caption">
           <div>
-            <h2 id="dialog-title">{{ selectedStyle.name }}</h2>
-            <p id="dialog-description">{{ selectedStyle.description }}</p>
+            <h2 id="dialog-title">
+              {{ messages.styles.items[selectedStyle.id].name }}
+            </h2>
+            <p id="dialog-description">
+              {{ messages.styles.items[selectedStyle.id].description }}
+            </p>
           </div>
           <span>{{
-            selectedStyle.tier === "pro" ? "Pro 样式" : "基础样式"
+            selectedStyle.tier === "pro"
+              ? messages.styles.dialogPro
+              : messages.styles.dialogBasic
           }}</span>
         </div>
       </div>

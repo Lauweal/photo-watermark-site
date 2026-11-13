@@ -8,6 +8,8 @@ import FeatureDetails from "../components/FeatureDetails.vue";
 import FrequentlyAskedQuestions from "../components/FrequentlyAskedQuestions.vue";
 import { asset } from "../lib/assets.js";
 import { useSiteMotion } from "../composables/useSiteMotion.js";
+import { useI18n } from "../i18n";
+const { messages } = useI18n();
 const { hoverLift, pressScale, transition } = useSiteMotion();
 </script>
 
@@ -26,15 +28,22 @@ const { hoverLift, pressScale, transition } = useSiteMotion();
         ><span></span>
       </div>
       <div>
-        <p class="section-kicker">好好创作，也好好保护</p>
-        <h2 id="privacy-heading">照片属于你，<br />也留在你的设备里。</h2>
+        <p class="section-kicker">{{ messages.privacyBanner.kicker }}</p>
+        <h2 id="privacy-heading">
+          {{ messages.privacyBanner.titleLines[0] }}<br />{{
+            messages.privacyBanner.titleLines[1]
+          }}
+        </h2>
         <p>
-          水印合成和照片精修在本机完成，照片不会由本应用上传。<br />照片访问、EXIF
-          读取，由你决定。
+          <template
+            v-for="(line, index) in messages.privacyBanner.body.split('\n')"
+            :key="index"
+            ><br v-if="index > 0" />{{ line }}</template
+          >
         </p>
-        <MotionTextLink to="/privacy" arrow="right"
-          >了解我们如何处理数据</MotionTextLink
-        >
+        <MotionTextLink to="/privacy" arrow="right">{{
+          messages.privacyBanner.link
+        }}</MotionTextLink>
       </div>
     </section>
     <FrequentlyAskedQuestions />
@@ -42,18 +51,18 @@ const { hoverLift, pressScale, transition } = useSiteMotion();
       <div class="closing-mark" aria-hidden="true">
         <img :src="asset('icon.png')" width="72" height="72" alt="" />
       </div>
-      <p>下一张照片，留点不一样。</p>
-      <h2 id="closing-title">让瞬间，有你的落款。</h2>
+      <p>{{ messages.closing.lead }}</p>
+      <h2 id="closing-title">{{ messages.closing.title }}</h2>
       <MotionRouterLink
         class="button button-purple"
         :to="{ name: 'home', hash: '#playground' }"
         :while-hover="hoverLift"
         :while-press="pressScale"
         :transition="transition"
-        >开始一场小小的创作
+        >{{ messages.closing.cta }}
         <svg class="icon" aria-hidden="true">
           <use href="#icon-arrow" /></svg></MotionRouterLink
-      ><span class="closing-note">水印大师 · 为每一张你喜欢的照片</span>
+      ><span class="closing-note">{{ messages.closing.note }}</span>
     </section>
   </main>
 </template>
