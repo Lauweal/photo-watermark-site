@@ -56,6 +56,32 @@ export interface FaqItem {
   answer: Inline[];
 }
 
+/** One numbered step in the landing page workflow strip. */
+export interface WorkflowStep {
+  index: string;
+  title: string;
+  body: string;
+}
+
+/** A single capability tile in the landing page bento grid. */
+export interface CapabilityTile {
+  meta: string;
+  title: string;
+  body: string;
+}
+
+/** A headline number in the capability stats band. */
+export interface CapabilityStat {
+  value: string;
+  label: string;
+}
+
+/** A retouch tool group, e.g. Light → [Exposure, Contrast, Highlights]. */
+export interface RetouchGroup {
+  name: string;
+  params: string[];
+}
+
 export interface Messages {
   /** Native name of the language, shown in the switcher. */
   localeLabel: string;
@@ -157,21 +183,47 @@ export interface Messages {
     disclaimer: string;
     photoAlt: string;
   };
+  workflow: {
+    kicker: string;
+    title: string;
+    blurb: string;
+    steps: WorkflowStep[];
+  };
   details: {
     kicker: string;
     title: string;
     blurb: string;
     exifFocal: string;
     exifAperture: string;
+    exifShutter: string;
     exifIso: string;
+    exifDate: string;
+    exifLocation: string;
+    exifAuto: string;
     exifConfirm: string;
     exifTitle: string;
     exifBody: string;
     exifNote: string;
-    retouchTabs: [string, string, string];
     retouchTitle: string;
     retouchBody: string;
     retouchBadge: string;
+    retouchHint: string;
+    retouchGroups: RetouchGroup[];
+  };
+  capabilities: {
+    kicker: string;
+    title: string;
+    blurb: string;
+    tiles: {
+      logos: CapabilityTile;
+      typography: CapabilityTile;
+      invert: CapabilityTile;
+      batch: CapabilityTile;
+      export: CapabilityTile;
+      languages: CapabilityTile;
+    };
+    statsAria: string;
+    stats: CapabilityStat[];
   };
   privacyBanner: {
     kicker: string;

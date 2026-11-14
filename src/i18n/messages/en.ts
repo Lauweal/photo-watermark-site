@@ -160,29 +160,127 @@ export const en: Messages = {
       "This shows layout and color interaction. For full styles, photo import, and export, try the app.",
     photoAlt: "A yellow and purple garden photo for trying out watermarks",
   },
+  workflow: {
+    kicker: "Just a few steps",
+    title: "From a photo, to a finished piece.",
+    blurb: "No switching between apps,\nand signature and retouch in one place.",
+    steps: [
+      {
+        index: "01",
+        title: "Choose your photos",
+        body: "Import several from the album at once and edit the whole set together.",
+      },
+      {
+        index: "02",
+        title: "Pick a style",
+        body: "Eight watermark layouts, with Basic and Pro each holding its own look.",
+      },
+      {
+        index: "03",
+        title: "Write your caption",
+        body: "Edit the title, description, location, shooting parameters and camera logo just as you like.",
+      },
+      {
+        index: "04",
+        title: "Retouch and export",
+        body: "Adjust light, color and detail, then export a high-resolution image to the photo album.",
+      },
+    ],
+  },
   details: {
-    kicker: "From shutter press to share",
-    title: "Make creating feel effortless.",
-    blurb: "Leave the fuss to the tool,\ngive your attention back to the photo.",
+    kicker: "From shutter press to just before sharing",
+    title: "Let creating feel a little easier.",
+    blurb: "Leave the fuss to the tool,\nand give your attention back to the photo.",
     exifFocal: "Focal length",
     exifAperture: "Aperture",
+    exifShutter: "Shutter",
     exifIso: "ISO",
-    exifConfirm: "Shot details from your photo",
+    exifDate: "Date",
+    exifLocation: "Location",
+    exifAuto: "Read automatically",
+    exifConfirm: "From your photo's shooting data",
     exifTitle: "Every shutter press leaves a trace.",
     exifBody:
-      "Read a photo's EXIF data to bring camera settings into the watermark. Titles, descriptions, and locations can be edited however you like.",
-    exifNote: "EXIF reading can be turned off in the app's settings",
-    retouchTabs: ["Light", "Color", "Curves"],
+      "Read a photo's shooting data and carry the focal length, aperture, shutter, ISO, date and location into the watermark. Titles, descriptions and locations can be edited just as you like.",
+    exifNote: "Shooting-data reading can be turned off in the app settings",
     retouchTitle: "Tune it to the light you remember.",
     retouchBody:
-      "Adjust light, color, and curves in Pro, then add a watermark after retouching, so the image and its signature blend together naturally.",
+      "Adjust light, color and detail in Pro, then add the watermark after retouching, so the image and its signature settle together naturally.",
     retouchBadge: "Pro photo retouch",
+    retouchHint: "Tap a tool group to see its controls",
+    retouchGroups: [
+      {
+        name: "Light",
+        params: ["Exposure", "Brightness", "Contrast", "Highlights", "Shadows", "Whites", "Blacks"],
+      },
+      { name: "Levels", params: ["Levels", "Curves"] },
+      { name: "Color", params: ["Saturation", "Vibrance", "Hue"] },
+      { name: "White balance", params: ["Temperature", "Tint"] },
+      { name: "Color grading", params: ["Shadows", "Midtones", "Highlights"] },
+      {
+        name: "HSL",
+        params: ["Red", "Orange", "Yellow", "Green", "Cyan", "Blue", "Purple", "Magenta"],
+      },
+      {
+        name: "Detail",
+        params: ["Clarity", "Sharpen", "Radius", "Masking", "Texture", "Dehaze"],
+      },
+      { name: "Noise reduction", params: ["Luminance", "Color"] },
+      { name: "Effects", params: ["Vignette", "Grain"] },
+      { name: "Portrait", params: ["Enhance", "Brighten", "Warmth", "Intensity"] },
+      { name: "Crop", params: ["Original", "1:1", "4:5", "16:9"] },
+    ],
+  },
+  capabilities: {
+    kicker: "More than a single watermark",
+    title: "Every detail, handed over to you.",
+    blurb:
+      "From camera logos to typefaces, from one-tap inversion to batch export, every corner of the watermark is yours to decide.",
+    tiles: {
+      logos: {
+        meta: "29 brands",
+        title: "Camera logo library",
+        body: "Apple, Canon, Nikon, Sony, Leica, Hasselblad, DJI and more — the major camera and phone brands, each in a light and a dark version.",
+      },
+      typography: {
+        meta: "22 typefaces",
+        title: "Choose each typeface",
+        body: "Pick the typeface for the brand, title, description, location, shooting data and date separately, so every line has its own character.",
+      },
+      invert: {
+        meta: "One-tap switch",
+        title: "Invert the whole mark",
+        body: "Swap paper white and ink black in one tap, so the mark sits well on a bright photo or a moodier frame.",
+      },
+      batch: {
+        meta: "Edit the whole set",
+        title: "Batch export",
+        body: "Import several photos at once — style, typeface and inversion apply together, and they save together on export.",
+      },
+      export: {
+        meta: "Full resolution",
+        title: "High-resolution export",
+        body: "Export as top-quality JPEG with a long edge of at least 2048 pixels, sharp for sharing and printing alike.",
+      },
+      languages: {
+        meta: "96 languages",
+        title: "Localized formatting",
+        body: "Units and dates follow your region, and focal length, aperture, shutter and ISO read the way they should.",
+      },
+    },
+    statsAria: "Product capabilities at a glance",
+    stats: [
+      { value: "8", label: "watermark styles" },
+      { value: "29", label: "camera brand logos" },
+      { value: "22", label: "typefaces" },
+      { value: "96", label: "languages supported" },
+    ],
   },
   privacyBanner: {
     kicker: "Create well, and protect well",
     titleLines: ["Your photos are yours,", "and stay on your device."],
     body:
-      "Watermark compositing and photo retouching happen on your device, and the app doesn't upload your photos.\nPhoto access and EXIF reading are up to you.",
+      "Watermark compositing and photo retouching happen on your device, and the app doesn't upload your photos.\nPhoto access and reading shot details are up to you.",
     link: "Learn how we handle data",
   },
   faq: {
@@ -207,7 +305,7 @@ export const en: Messages = {
       {
         question: "Can I edit the shot details on a photo?",
         answer: [
-          "Yes. The app lets you edit fields in the watermark such as title, description, location, and shot settings, and different styles offer different fields. You can also turn off EXIF reading for later photos and fill in the details manually.",
+          "Yes. The app lets you edit fields in the watermark such as title, description, location, and shot settings, and different styles offer different fields. You can also turn off reading shot details for later photos and fill in the details manually.",
         ],
       },
       {

@@ -4,7 +4,9 @@ import MotionRouterLink from "../components/MotionRouterLink.vue";
 import HeroSection from "../components/HeroSection.vue";
 import StyleGallery from "../components/StyleGallery.vue";
 import WatermarkPlayground from "../components/WatermarkPlayground.vue";
+import WorkflowStrip from "../components/WorkflowStrip.vue";
 import FeatureDetails from "../components/FeatureDetails.vue";
+import CapabilityGrid from "../components/CapabilityGrid.vue";
 import FrequentlyAskedQuestions from "../components/FrequentlyAskedQuestions.vue";
 import { asset } from "../lib/assets.js";
 import { useSiteMotion } from "../composables/useSiteMotion.js";
@@ -18,7 +20,9 @@ const { hoverLift, pressScale, transition } = useSiteMotion();
     <HeroSection />
     <StyleGallery />
     <WatermarkPlayground />
+    <WorkflowStrip />
     <FeatureDetails />
+    <CapabilityGrid />
     <section
       class="privacy-banner page-width"
       aria-labelledby="privacy-heading"

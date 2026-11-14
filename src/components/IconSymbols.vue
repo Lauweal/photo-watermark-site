@@ -34,6 +34,20 @@
       <symbol id="icon-chevron" viewBox="0 0 24 24">
         <path d="m6 9 6 6 6-6" />
       </symbol>
+      <symbol id="icon-type" viewBox="0 0 24 24">
+        <path d="M5 19 12 5l7 14M7.6 14.4h8.8" />
+      </symbol>
+      <symbol id="icon-invert" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 3a9 9 0 0 1 0 18Z" />
+      </symbol>
+      <symbol id="icon-stack" viewBox="0 0 24 24">
+        <rect x="9" y="9" width="11" height="11" rx="2.5" />
+        <path d="M5 15V6a2 2 0 0 1 2-2h9" />
+      </symbol>
+      <symbol id="icon-download" viewBox="0 0 24 24">
+        <path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14" />
+      </symbol>
     </defs>
   </svg>
 </template>
