@@ -6,9 +6,11 @@ import IconSymbols from "./components/IconSymbols.vue";
 import SiteHeader from "./components/SiteHeader.vue";
 import SiteFooter from "./components/SiteFooter.vue";
 import { useI18n } from "./i18n";
+import { isLegalDocumentId, legalCopy } from "./lib/legal";
 const route = useRoute();
-const { messages } = useI18n();
-const page = computed(() => (route.name === "privacy" ? "privacy" : "home"));
+const { locale, messages } = useI18n();
+const page = computed(() => (isLegalDocumentId(route.name) ? "legal" : "home"));
+const copy = computed(() => legalCopy[locale.value]);
 </script>
 
 <template>
@@ -19,11 +21,12 @@ const page = computed(() => (route.name === "privacy" ? "privacy" : "home"));
     <IconSymbols />
     <RouterLink
       class="skip-link"
-      :to="{ name: page, hash: page === 'privacy' ? '#policy' : '#main' }"
+      :to="{
+        name: route.name ?? 'home',
+        hash: page === 'legal' ? '#policy' : '#main',
+      }"
       >{{
-        page === "privacy"
-          ? messages.common.skipToPolicy
-          : messages.common.skipToMain
+        page === "legal" ? copy.skip : messages.common.skipToMain
       }}</RouterLink
     >
     <SiteHeader :page="page" />

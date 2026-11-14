@@ -5,7 +5,14 @@ import { asset } from "../lib/assets";
 import { useSiteMotion } from "../composables/useSiteMotion";
 import { useI18n } from "../i18n";
 
-type Layout = "classic" | "minimal" | "stamp";
+type Layout =
+  | "classic"
+  | "minimal"
+  | "stamp"
+  | "film-frame"
+  | "polaroid"
+  | "editorial"
+  | "fine-print";
 type Tone = "light" | "dark";
 const { messages } = useI18n();
 const initialState = computed(() => ({
@@ -21,6 +28,10 @@ const layouts = computed<{ id: Layout; label: string }[]>(() => [
   { id: "classic", label: messages.value.playground.layoutClassic },
   { id: "minimal", label: messages.value.playground.layoutMinimal },
   { id: "stamp", label: messages.value.playground.layoutStamp },
+  { id: "film-frame", label: messages.value.styles.items["film-frame"].name },
+  { id: "polaroid", label: messages.value.styles.items.polaroid.name },
+  { id: "editorial", label: messages.value.styles.items.editorial.name },
+  { id: "fine-print", label: messages.value.styles.items["fine-print"].name },
 ]);
 const tones = computed<{ id: Tone; label: string }[]>(() => [
   { id: "light", label: messages.value.playground.toneLight },
@@ -89,8 +100,8 @@ function reset() {
     <div class="playground">
       <div class="demo-stage">
         <span class="stage-label"
-          ><span aria-hidden="true"></span> {{ messages.playground.stageLabel
-          }}</span
+          ><span aria-hidden="true"></span>
+          {{ messages.playground.stageLabel }}</span
         >
         <div class="stage-grid" aria-hidden="true"></div>
         <motion.figure
@@ -99,23 +110,36 @@ function reset() {
           class="demo-print"
           :data-layout="state.layout"
           :data-tone="state.tone"
+          :data-designed="
+            ['film-frame', 'polaroid', 'editorial', 'fine-print'].includes(
+              state.layout,
+            )
+          "
           :initial="false"
           :animate="{ rotate: -3 }"
           :transition="{ ...transition, duration: reducedMotion ? 0 : 0.2 }"
         >
           <div class="photo-crop">
             <img
-              :src="asset('classic.jpg')"
-              width="1280"
-              height="1313"
+              :src="asset('demo-photo.jpg')"
+              width="960"
+              height="640"
               loading="lazy"
               :alt="messages.playground.photoAlt"
               :style="{ filter: `saturate(${state.saturation / 100})` }"
             />
+            <span
+              v-if="state.layout === 'fine-print'"
+              class="demo-crop-marks"
+              aria-hidden="true"
+            >
+              <i v-for="corner in 4" :key="corner"></i>
+            </span>
           </div>
           <figcaption>
-            <span class="demo-brand">{{ messages.playground.demoBrand }}</span
-            ><strong id="demo-title">{{
+            <span class="demo-brand">{{
+              messages.playground.demoBrand
+            }}</span><strong id="demo-title">{{
               state.caption.trim() || messages.playground.defaultCaption
             }}</strong
             ><span class="demo-location">{{
@@ -123,6 +147,9 @@ function reset() {
             }}</span
             ><span class="demo-exif"
               >85mm &nbsp; f/2.5 &nbsp; 1/1667s &nbsp; ISO 100</span
+            >
+            <span v-if="state.layout === 'fine-print'" class="demo-edition"
+              >1 / 1</span
             >
           </figcaption>
         </motion.figure>
@@ -217,8 +244,9 @@ function reset() {
             :aria-valuetext="`${state.saturation}%`"
           />
           <div class="range-endpoints" aria-hidden="true">
-            <span>{{ messages.playground.saturationLow }}</span
-            ><span>{{ messages.playground.saturationHigh }}</span>
+            <span>{{ messages.playground.saturationLow }}</span><span>{{
+              messages.playground.saturationHigh
+            }}</span>
           </div>
         </div>
         <motion.button

@@ -42,7 +42,11 @@ export type StyleId =
   | "hasselblad-frame"
   | "profile-camera"
   | "airmail-stamp"
-  | "minimal-camera";
+  | "minimal-camera"
+  | "film-frame"
+  | "polaroid"
+  | "editorial"
+  | "fine-print";
 
 export interface StyleCopy {
   name: string;
@@ -88,7 +92,6 @@ export interface Messages {
   brand: string;
   meta: {
     home: { title: string; description: string };
-    privacy: { title: string; description: string };
   };
   common: {
     skipToMain: string;
@@ -242,22 +245,5 @@ export interface Messages {
     title: string;
     cta: string;
     note: string;
-  };
-  privacy: {
-    kicker: string;
-    title: string;
-    intro: string;
-    updatedLabel: string;
-    updatedValue: string;
-    updatedDatetime: string;
-    appliesLabel: string;
-    appliesValue: string;
-    tocLabel: string;
-    tocAria: string;
-    contactLabel: string;
-    contactEmail: string;
-    summaryTitle: string;
-    summaryParagraphs: string[];
-    sections: PrivacySection[];
   };
 }

@@ -5,13 +5,13 @@ import LocaleSwitcher from "./LocaleSwitcher.vue";
 import { asset } from "../lib/assets";
 import { useSiteMotion } from "../composables/useSiteMotion";
 import { useI18n } from "../i18n";
-withDefaults(defineProps<{ page?: "home" | "privacy" }>(), { page: "home" });
+withDefaults(defineProps<{ page?: "home" | "legal" }>(), { page: "home" });
 const { messages } = useI18n();
 const { hoverLift, pressScale, transition } = useSiteMotion();
 </script>
 
 <template>
-  <header class="site-header" :class="{ 'legal-header': page === 'privacy' }">
+  <header class="site-header" :class="{ 'legal-header': page === 'legal' }">
     <RouterLink class="brand" to="/" :aria-label="messages.header.brandAria"
       ><img :src="asset('icon.png')" width="36" height="36" alt="" /><span>{{
         messages.brand
@@ -21,8 +21,7 @@ const { hoverLift, pressScale, transition } = useSiteMotion();
       <nav class="desktop-nav" :aria-label="messages.header.navAria">
         <RouterLink :to="{ name: 'home', hash: '#styles' }">{{
           messages.header.navStyles
-        }}</RouterLink
-        ><RouterLink :to="{ name: 'home', hash: '#details' }">{{
+        }}</RouterLink><RouterLink :to="{ name: 'home', hash: '#details' }">{{
           messages.header.navDetails
         }}</RouterLink
         ><RouterLink to="/privacy">{{ messages.header.navPrivacy }}</RouterLink>

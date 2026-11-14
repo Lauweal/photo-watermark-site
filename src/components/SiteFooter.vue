@@ -2,8 +2,11 @@
 import { asset } from "../lib/assets";
 import { RouterLink } from "vue-router";
 import { useI18n } from "../i18n";
-withDefaults(defineProps<{ page?: "home" | "privacy" }>(), { page: "home" });
-const { messages } = useI18n();
+import { computed } from "vue";
+import { legalContactEmail, legalCopy, legalDocumentIds } from "../lib/legal";
+withDefaults(defineProps<{ page?: "home" | "legal" }>(), { page: "home" });
+const { locale, messages } = useI18n();
+const copy = computed(() => legalCopy[locale.value]);
 </script>
 
 <template>
@@ -15,10 +18,13 @@ const { messages } = useI18n();
     >
     <p>{{ messages.footer.tagline }}</p>
     <nav :aria-label="messages.footer.navAria">
-      <RouterLink :to="page === 'privacy' ? '/' : '/privacy'">{{
-        page === "privacy" ? messages.common.home : messages.common.privacy
-      }}</RouterLink
-      ><a href="mailto:lemonpaimc@163.com">{{ messages.footer.contact }}</a>
+      <RouterLink v-if="page === 'legal'" to="/">{{
+        messages.common.home
+      }}</RouterLink>
+      <RouterLink v-for="id in legalDocumentIds" :key="id" :to="{ name: id }">
+        {{ copy.titles[id] }}
+      </RouterLink>
+      <a :href="`mailto:${legalContactEmail}`">{{ messages.footer.contact }}</a>
     </nav>
     <small>{{ messages.footer.copyright }}</small>
   </footer>

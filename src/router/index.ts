@@ -1,17 +1,18 @@
 import { watch } from "vue";
 import { createRouter, createWebHashHistory } from "vue-router";
 import { useI18n } from "../i18n";
+import { isLegalDocumentId, legalCopy, legalDocumentIds } from "../lib/legal";
 import LandingPage from "../pages/LandingPage.vue";
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     { path: "/", name: "home", component: LandingPage },
-    {
-      path: "/privacy",
-      name: "privacy",
+    ...legalDocumentIds.map((id) => ({
+      path: `/${id}`,
+      name: id,
       component: () => import("../pages/PrivacyPage.vue"),
-    },
+    })),
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
   scrollBehavior(to, _from, savedPosition) {
@@ -41,8 +42,12 @@ const { locale, messages } = useI18n();
 
 /** Keep the document title and social meta in sync with the active locale. */
 function applyMeta(page: unknown) {
-  const copy =
-    page === "privacy" ? messages.value.meta.privacy : messages.value.meta.home;
+  const copy = isLegalDocumentId(page)
+    ? {
+        title: `${legalCopy[locale.value].titles[page]} · ${messages.value.brand}`,
+        description: legalCopy[locale.value].sourceNote,
+      }
+    : messages.value.meta.home;
   document.title = copy.title;
   document
     .querySelector('meta[property="og:title"]')

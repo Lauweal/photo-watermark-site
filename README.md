@@ -1,6 +1,6 @@
 # 水印大师 · Vue 产品网站
 
-从 `photo-watermark/web` 迁移的 Vue 3 + TypeScript + Vite 单页网站，路由采用 vue-router hash 模式，动画采用 Motion 官方 Vue 包 `motion-v`。保留紫灰配色、全部八款水印样例、交互工作台、隐私政策和反馈邮箱 `lemonpaimc@163.com`。
+从 `photo-watermark/web` 迁移的 Vue 3 + TypeScript + Vite 单页网站，路由采用 vue-router hash 模式，动画采用 Motion 官方 Vue 包 `motion-v`。保留紫灰配色、全部十二款水印样例、交互工作台、隐私政策和反馈邮箱 `soratani@126.com`。
 
 ## 本地运行
 
@@ -30,7 +30,7 @@ pnpm exec prettier --check src index.html vite.config.ts eslint.config.js
 - `src/components/WatermarkPlayground.vue`：`reactive` 管理版式、文案、色调与饱和度，支持一键恢复。
 - `src/components/FrequentlyAskedQuestions.vue`：可键盘操作的折叠面板，使用 `AnimatePresence` 控制内容进出。
 - `src/pages/PrivacyPage.vue`：完整政策正文、阅读导航和当前章节提示。
-- `src/data/watermarkStyles.ts`：八款水印的统一数据源。
+- `src/data/watermarkStyles.ts`：十二款水印的统一数据源，与 App 的基础 / Pro 分类一致。
 - `src/composables/useSiteMotion.ts`：统一动效参数，响应系统“减少动态效果”偏好。
 - `src/style.css`：原网站的视觉和响应式样式；没有 CSS 关键帧和 CSS 动画过渡。
 - `public/assets/`：本地图片、产品图标与字体，不依赖外部 CDN。

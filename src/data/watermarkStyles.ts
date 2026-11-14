@@ -12,8 +12,20 @@ export interface WatermarkStyle {
 
 /** Visual catalogue; all human-readable copy lives in the i18n messages. */
 export const watermarkStyles: WatermarkStyle[] = [
-  { id: "classic", file: "classic.jpg", tier: "basic", width: 1280, height: 1313 },
-  { id: "hasselblad", file: "hasselblad.jpg", tier: "basic", width: 1280, height: 855 },
+  {
+    id: "classic",
+    file: "classic.jpg",
+    tier: "basic",
+    width: 1280,
+    height: 1313,
+  },
+  {
+    id: "hasselblad",
+    file: "hasselblad.jpg",
+    tier: "basic",
+    width: 1280,
+    height: 855,
+  },
   {
     id: "postage-stamp",
     file: "postage-stamp.jpg",
@@ -55,5 +67,33 @@ export const watermarkStyles: WatermarkStyle[] = [
     tier: "pro",
     width: 1206,
     height: 1007,
+  },
+  {
+    id: "film-frame",
+    file: "film-frame.jpg",
+    tier: "basic",
+    width: 640,
+    height: 800,
+  },
+  {
+    id: "polaroid",
+    file: "polaroid.jpg",
+    tier: "pro",
+    width: 640,
+    height: 826,
+  },
+  {
+    id: "editorial",
+    file: "editorial.jpg",
+    tier: "pro",
+    width: 640,
+    height: 800,
+  },
+  {
+    id: "fine-print",
+    file: "fine-print.jpg",
+    tier: "pro",
+    width: 640,
+    height: 800,
   },
 ];

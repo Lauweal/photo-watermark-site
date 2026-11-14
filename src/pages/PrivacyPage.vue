@@ -1,143 +1,144 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
+import { computed, onBeforeUnmount, ref, shallowRef, watch } from "vue";
+import { RouterLink, useRoute } from "vue-router";
 import RichText from "../components/RichText.vue";
-import { onMounted, onBeforeUnmount, ref } from "vue";
 import { useI18n } from "../i18n";
+import {
+  isLegalDocumentId,
+  legalBlocks,
+  legalContactEmail,
+  legalCopy,
+  legalReadingCopy,
+  getWebLegalBundle,
+} from "../lib/legal";
+import type { LegalBundle } from "../../../src/features/legal/types";
 
-const { messages } = useI18n();
+const route = useRoute();
+const { locale } = useI18n();
+const copy = computed(() => legalCopy[locale.value]);
+const documentId = computed(() =>
+  isLegalDocumentId(route.name) ? route.name : "privacy",
+);
+const readingMode = ref({ locale: locale.value, original: false });
+const showOriginal = computed(() => readingMode.value.locale === locale.value && readingMode.value.original);
+const contentLanguage = computed(() => showOriginal.value ? "zh-Hans" : locale.value);
+const bundle = shallowRef<LegalBundle>();
+const loadFailed = ref(false);
+const retryCount = ref(0);
+const readingCopy = computed(() => legalReadingCopy[locale.value]);
+const document = computed(() => bundle.value?.documents[documentId.value]);
+watch([contentLanguage, retryCount], async ([language], _previous, onCleanup) => {
+  let cancelled = false;
+  onCleanup(() => { cancelled = true; });
+  bundle.value = undefined;
+  loadFailed.value = false;
+  try {
+    const nextBundle = await getWebLegalBundle(language);
+    if (!cancelled) bundle.value = nextBundle;
+  } catch {
+    if (!cancelled) loadFailed.value = true;
+  }
+}, { immediate: true });
+const sections = computed(() =>
+  (document.value?.sections ?? []).map((section, index) => ({
+    ...section,
+    id: `section-${index}`,
+    blocks: legalBlocks(section.body),
+  })),
+);
+watch(sections, () => {
+  if (route.hash) {
+    window.document.getElementById(route.hash.slice(1))?.scrollIntoView({ block: "start" });
+  }
+}, { flush: "post" });
 const pageRoot = ref<HTMLElement>();
-const activeSection = ref("scope");
+const activeSection = ref("section-0");
 let observer: IntersectionObserver | undefined;
 
-/** The TOC reuses each section title without its leading “1. ” numbering. */
-function tocLabel(title: string) {
-  return title.replace(/^\d+\.\s*/, "");
-}
-
-onMounted(() => {
-  if (!("IntersectionObserver" in window)) return;
-  observer = new IntersectionObserver(
-    (entries) => {
-      const current = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-      if (current) activeSection.value = current.target.id;
-    },
-    { rootMargin: "-5% 0px -65% 0px", threshold: 0 },
-  );
-  pageRoot.value
-    ?.querySelectorAll(".legal-section")
-    .forEach((section) => observer?.observe(section));
-});
+watch(
+  [sections, pageRoot],
+  () => {
+    observer?.disconnect();
+    activeSection.value = "section-0";
+    if (!("IntersectionObserver" in window)) return;
+    observer = new IntersectionObserver(
+      (entries) => {
+        const current = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (a, b) => a.boundingClientRect.top - b.boundingClientRect.top,
+          )[0];
+        if (current) activeSection.value = current.target.id;
+      },
+      { rootMargin: "-5% 0px -65% 0px", threshold: 0 },
+    );
+    pageRoot.value
+      ?.querySelectorAll(".legal-section")
+      .forEach((section) => observer?.observe(section));
+  },
+  { flush: "post" },
+);
 onBeforeUnmount(() => observer?.disconnect());
 </script>
 
 <template>
-  <main ref="pageRoot" class="page-width">
+  <main v-if="document" ref="pageRoot" class="page-width">
     <div class="legal-intro">
-      <p class="section-kicker">{{ messages.privacy.kicker }}</p>
-      <h1>{{ messages.privacy.title }}</h1>
-      <p>{{ messages.privacy.intro }}</p>
-      <div class="legal-meta">
-        <span
-          >{{ messages.privacy.updatedLabel
-          }}<time :datetime="messages.privacy.updatedDatetime">{{
-            messages.privacy.updatedValue
-          }}</time></span
-        ><span
-          >{{ messages.privacy.appliesLabel
-          }}{{ messages.privacy.appliesValue }}</span
-        >
-      </div>
+      <p class="section-kicker">{{ copy.kicker }}</p>
+      <h1 :lang="contentLanguage">{{ document.title }}</h1>
+      <p>{{ showOriginal || locale === "zh-Hans" ? readingCopy.originalNotice : readingCopy.notice }}</p>
+      <button
+        v-if="locale !== 'zh-Hans'"
+        class="legal-source-toggle"
+        type="button"
+        @click="readingMode = { locale, original: !showOriginal }"
+      >{{ showOriginal ? readingCopy.showTranslation : readingCopy.showOriginal }}</button>
     </div>
     <div class="legal-layout">
-      <aside class="legal-toc" :aria-label="messages.privacy.tocLabel">
-        <p>{{ messages.privacy.tocLabel }}</p>
-        <nav :aria-label="messages.privacy.tocAria">
+      <aside class="legal-toc" :aria-label="copy.toc">
+        <p>{{ copy.toc }}</p>
+        <nav :aria-label="copy.toc" :lang="contentLanguage">
           <RouterLink
-            v-for="section in messages.privacy.sections"
+            v-for="section in sections"
             :key="section.id"
-            :to="{ name: 'privacy', hash: `#${section.id}` }"
+            :to="{ name: documentId, hash: `#${section.id}` }"
             :class="{ 'is-active': activeSection === section.id }"
             :aria-current="
               activeSection === section.id ? 'location' : undefined
             "
-            >{{ tocLabel(section.title) }}</RouterLink
+            >{{ section.heading }}</RouterLink
           >
         </nav>
         <div class="legal-contact">
-          {{ messages.privacy.contactLabel
-          }}<a :href="`mailto:${messages.privacy.contactEmail}`">{{
-            messages.privacy.contactEmail
-          }}</a>
+          {{ copy.contact }}
+          <a :href="`mailto:${legalContactEmail}`">{{ legalContactEmail }}</a>
         </div>
       </aside>
-      <article class="legal-article" id="policy">
-        <div class="privacy-summary">
-          <h2>{{ messages.privacy.summaryTitle }}</h2>
-          <p v-for="(paragraph, index) in messages.privacy.summaryParagraphs" :key="index">
-            {{ paragraph }}
-          </p>
-        </div>
+      <article id="policy" class="legal-article legal-source" :lang="contentLanguage">
         <section
-          v-for="section in messages.privacy.sections"
+          v-for="section in sections"
+          :id="section.id"
           :key="section.id"
           class="legal-section"
-          :id="section.id"
         >
-          <h2>{{ section.title }}</h2>
-          <template v-for="(node, nodeIndex) in section.nodes" :key="nodeIndex">
-            <h3 v-if="node.kind === 'h3'">{{ node.text }}</h3>
-            <p v-else-if="node.kind === 'p'">
-              <RichText :content="node.content" />
-            </p>
-            <p v-else-if="node.kind === 'note'" class="legal-note">
-              <RichText :content="node.content" />
-            </p>
-            <ul v-else-if="node.kind === 'list'">
-              <li v-for="(item, itemIndex) in node.items" :key="itemIndex">
+          <h2>{{ section.heading }}</h2>
+          <template v-for="(block, index) in section.blocks" :key="index">
+            <h3 v-if="block.kind === 'heading'">{{ block.text }}</h3>
+            <ol v-else-if="block.kind === 'list'" :start="block.start">
+              <li v-for="(item, itemIndex) in block.items" :key="itemIndex">
                 <RichText :content="item" />
               </li>
-            </ul>
-            <div
-              v-else-if="node.kind === 'table'"
-              class="legal-table-wrap"
-              role="region"
-              :aria-label="node.aria"
-              tabindex="0"
-            >
-              <table class="legal-table">
-                <thead>
-                  <tr>
-                    <th
-                      v-for="(cell, cellIndex) in node.head"
-                      :key="cellIndex"
-                      scope="col"
-                    >
-                      {{ cell }}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(row, rowIndex) in node.rows" :key="rowIndex">
-                    <td
-                      v-for="(cell, cellIndex) in row"
-                      :key="cellIndex"
-                    >
-                      {{ cell }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div v-else-if="node.kind === 'contact'" class="contact-box">
-              <p><RichText :content="node.intro" /></p>
-              <a :href="`mailto:${node.email}`">{{ node.email }}</a>
-              <p class="legal-note"><RichText :content="node.note" /></p>
-            </div>
+            </ol>
+            <p v-else><RichText :content="block.content" /></p>
           </template>
         </section>
       </article>
     </div>
+  </main>
+  <main v-else class="page-width legal-intro" :aria-busy="!loadFailed">
+    <template v-if="loadFailed">
+      <p role="alert">{{ copy.loadError }}</p>
+      <button class="legal-source-toggle" type="button" @click="retryCount += 1">{{ copy.retry }}</button>
+    </template>
   </main>
 </template>

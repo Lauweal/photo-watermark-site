@@ -5,6 +5,7 @@ import { reactive } from "vue";
 import { AnimatePresence, motion } from "motion-v";
 import { useSiteMotion } from "../composables/useSiteMotion.js";
 import { useI18n } from "../i18n";
+import { legalContactEmail } from "../lib/legal";
 
 const { messages } = useI18n();
 const opened = reactive(new Set<number>());
@@ -23,7 +24,7 @@ const { reducedMotion, transition } = useSiteMotion();
     <div>
       <p class="section-kicker">{{ messages.faq.kicker }}</p>
       <h2 id="faq-title">{{ messages.faq.title }}</h2>
-      <MotionTextLink :href="`mailto:${messages.privacy.contactEmail}`">{{
+      <MotionTextLink :href="`mailto:${legalContactEmail}`">{{
         messages.faq.writeUs
       }}</MotionTextLink>
     </div>

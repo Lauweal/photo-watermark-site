@@ -1,0 +1,57 @@
+{
+  "zh-Hans": {
+    "notice": "这是根据当前中文协议生成的机器辅助译文，仅供阅读；适用地区及待核验事项保持不变，不表示已经完成当地法律审定。",
+    "originalNotice": "以下为当前完整中文原文。适用地区及待核验事项以协议实际内容为准。",
+    "showOriginal": "查看中文原文",
+    "showTranslation": "查看本语言译文",
+    "kicker": "协议与信息保护",
+    "toc": "阅读导航",
+    "contact": "联系运营者",
+    "skip": "跳至协议正文",
+    "back": "返回"
+  },
+  "zh-Hant": {
+    "notice": "這是根據目前中文協議產生的機器輔助譯文，僅供閱讀；適用地區及待核驗事項保持不變，不表示已經完成當地法律審定。",
+    "originalNotice": "以下為目前完整中文原文。適用地區及待核查事項以協議實際內容為準。",
+    "showOriginal": "看中文原文",
+    "showTranslation": "看本語言譯文",
+    "kicker": "協議與資訊保護",
+    "toc": "閱讀導航",
+    "contact": "聯繫營運者",
+    "skip": "跳至協議正文",
+    "back": "返回"
+  },
+  "ja": {
+    "notice": "これは、現在の中国語プロトコルに基づいて生成された機械支援翻訳であり、読み取り専用です。適用地域や確認事項に変更はなく、現地の法的審査が完了したものではありません。",
+    "originalNotice": "以下は現在の完全な中国語原文です。適用範囲や確認事項は実際の契約内容に準じます。",
+    "showOriginal": "中国語の原文を表示",
+    "showTranslation": "この言語の翻訳を見る",
+    "kicker": "契約と情報保護",
+    "toc": "読書ナビゲーション",
+    "contact": "オペレーターに連絡する",
+    "skip": "契約書の本文にジャンプします",
+    "back": "戻る"
+  },
+  "ko": {
+    "notice": "이것은 현재 중국어 프로토콜을 기반으로 생성된 기계 지원 번역이며 읽기 전용입니다. 해당 지역 및 확인 사항은 변함이 없으며, 현지 법률 검토가 완료되었음을 의미하지 않습니다.",
+    "originalNotice": "다음은 현재 완전한 중국어 원문이다. 적용분야 및 확인사항은 실제 계약 내용에 따릅니다.",
+    "showOriginal": "중국어 원문 보기",
+    "showTranslation": "이 언어로 번역 보기",
+    "kicker": "계약 및 정보 보호",
+    "toc": "내비게이션 읽기",
+    "contact": "교환원에게 연락하세요",
+    "skip": "계약 내용으로 이동",
+    "back": "반품"
+  },
+  "en": {
+    "notice": "This is a machine-assisted translation generated based on the current Chinese protocol and is for reading only; the applicable regions and matters to be verified remain unchanged, and it does not mean that local legal review has been completed.",
+    "originalNotice": "The following is the current complete Chinese original text. The applicable areas and matters to be verified shall be subject to the actual content of the agreement.",
+    "showOriginal": "View original Chinese text",
+    "showTranslation": "View translation in this language",
+    "kicker": "Agreements and Information Protection",
+    "toc": "Reading navigation",
+    "contact": "Contact the operator",
+    "skip": "Jump to the text of the agreement",
+    "back": "return"
+  }
+}
