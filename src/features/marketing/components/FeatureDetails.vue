@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { AnimatePresence, motion } from "motion-v";
-import { asset } from "../lib/assets";
-import { useSiteMotion } from "../composables/useSiteMotion";
-import { useI18n } from "../i18n";
+import { asset } from "../../../lib/assets";
+import { useSiteMotion } from "../../../composables/useSiteMotion";
+import { useI18n } from "../../../i18n";
 
 const { messages } = useI18n();
 const { reducedMotion, transition } = useSiteMotion();
@@ -16,8 +16,17 @@ const exifFields = computed(() => [
     value: "85",
     unit: "mm",
   },
-  { key: "aperture", label: messages.value.details.exifAperture, value: "f/2.5" },
-  { key: "shutter", label: messages.value.details.exifShutter, value: "1/320", unit: "s" },
+  {
+    key: "aperture",
+    label: messages.value.details.exifAperture,
+    value: "f/2.5",
+  },
+  {
+    key: "shutter",
+    label: messages.value.details.exifShutter,
+    value: "1/320",
+    unit: "s",
+  },
   { key: "iso", label: messages.value.details.exifIso, value: "ISO 100" },
   { key: "date", label: messages.value.details.exifDate, value: "2026-05-18" },
   {
@@ -32,7 +41,9 @@ const activeGroup = ref(0);
 const activeIndex = computed(() =>
   Math.min(activeGroup.value, groups.value.length - 1),
 );
-const activeParams = computed(() => groups.value[activeIndex.value]?.params ?? []);
+const activeParams = computed(
+  () => groups.value[activeIndex.value]?.params ?? [],
+);
 
 /** A subtle preview filter per tool group, so tapping one changes the photo. */
 const groupFilters = [
@@ -81,7 +92,11 @@ const photoFilter = computed(
               {{ messages.details.exifConfirm }}
             </p>
             <dl class="exif-fields">
-              <div v-for="field in exifFields" :key="field.key" class="exif-field">
+              <div
+                v-for="field in exifFields"
+                :key="field.key"
+                class="exif-field"
+              >
                 <dt>{{ field.label }}</dt>
                 <dd>
                   {{ field.value

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import MotionRouterLink from "./MotionRouterLink.vue";
-import MotionTextLink from "./MotionTextLink.vue";
+import MotionRouterLink from "../../../components/MotionRouterLink.vue";
+import MotionTextLink from "../../../components/MotionTextLink.vue";
 import { computed, onBeforeUnmount, watch } from "vue";
 import { motion, useSpring } from "motion-v";
-import { asset } from "../lib/assets.js";
-import { useSiteMotion } from "../composables/useSiteMotion.js";
-import { useI18n } from "../i18n";
+import { asset } from "../../../lib/assets.js";
+import { useSiteMotion } from "../../../composables/useSiteMotion.js";
+import { useI18n } from "../../../i18n";
 const { messages } = useI18n();
 const { reducedMotion, transition, hoverLift, pressScale } = useSiteMotion();
 const descriptionLines = computed(() =>
@@ -140,13 +140,15 @@ onBeforeUnmount(() => {
         </div>
         <figcaption>
           <div class="print-topline">
-            <span class="print-title">{{ messages.hero.printTitle }}</span
-            ><svg class="icon" aria-hidden="true">
+            <span class="print-title">{{ messages.hero.printTitle }}</span><svg
+              class="icon"
+              aria-hidden="true"
+            >
               <use href="#icon-spark" />
             </svg>
           </div>
-          <span class="print-story">{{ messages.hero.printStory }}</span
-          ><span class="print-exif"
+          <span class="print-story">{{ messages.hero.printStory }}</span><span
+            class="print-exif"
             >85mm &nbsp; f/2.5 &nbsp; 1/1667s &nbsp; ISO 100</span
           >
         </figcaption>

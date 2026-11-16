@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import MotionTextLink from "../components/MotionTextLink.vue";
-import MotionRouterLink from "../components/MotionRouterLink.vue";
+import MotionTextLink from "../../../components/MotionTextLink.vue";
+import MotionRouterLink from "../../../components/MotionRouterLink.vue";
 import HeroSection from "../components/HeroSection.vue";
 import StyleGallery from "../components/StyleGallery.vue";
 import WatermarkPlayground from "../components/WatermarkPlayground.vue";
@@ -8,9 +8,9 @@ import WorkflowStrip from "../components/WorkflowStrip.vue";
 import FeatureDetails from "../components/FeatureDetails.vue";
 import CapabilityGrid from "../components/CapabilityGrid.vue";
 import FrequentlyAskedQuestions from "../components/FrequentlyAskedQuestions.vue";
-import { asset } from "../lib/assets.js";
-import { useSiteMotion } from "../composables/useSiteMotion.js";
-import { useI18n } from "../i18n";
+import { asset } from "../../../lib/assets.js";
+import { useSiteMotion } from "../../../composables/useSiteMotion.js";
+import { useI18n } from "../../../i18n";
 const { messages } = useI18n();
 const { hoverLift, pressScale, transition } = useSiteMotion();
 </script>

@@ -10,9 +10,10 @@
 
 1. 更新根目录四份中文协议。
 2. 运行 `npm run legal:translate`，离线重新生成译文；可在命令后指定语言，例如 `npm run legal:translate -- ja ko`。
-3. 阅读并校订本目录的译文。尤其检查否定、例外、授权、期限、注销、取消续订和退款之间的区别。
-4. 运行 `npm run legal:sync`，将这五种语言同步到 App 与 Web。
-5. 运行 `npm run check:legal-localization`、`npm run check:compliance`、`npm run check:localization`、App 与 Web 的 Lint、类型检查和 Web 构建。
+3. 运行 `npm run legal:review`，统一修正机器译文里的加粗标记与链接空格，应用已复核的语句校正，并重算 `sourceHash` / `englishBasisHash`。输出会列出未命中的校订项，便于发现译文已变化。
+4. 阅读并校订本目录的译文。尤其检查否定、例外、授权、期限、注销、取消续订和退款之间的区别。如需再改译文，改完重新运行 `npm run legal:review`。
+5. 运行 `npm run legal:sync`，将这五种语言同步到 App 与 Web。
+6. 运行 `npm run check:legal-localization`、`npm run check:compliance`、`npm run check:localization`、App 与 Web 的 Lint、类型检查和 Web 构建。
 
 源文和页面提示共同计算 `sourceHash`。源文变更后，旧译文不能继续同步；同步工具会报错而不是静默展示过期译文。人工校订同一源文的译文时保留其 `sourceHash`。若要对源文改版后的译文作人工更新，应先完整核对该语言的四份协议，而不是只手动替换哈希以绕过检查。
 

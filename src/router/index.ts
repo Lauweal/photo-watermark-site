@@ -1,8 +1,12 @@
 import { watch } from "vue";
 import { createRouter, createWebHashHistory } from "vue-router";
 import { useI18n } from "../i18n";
-import { isLegalDocumentId, legalCopy, legalDocumentIds } from "../lib/legal";
-import LandingPage from "../pages/LandingPage.vue";
+import {
+  isLegalDocumentId,
+  legalCopy,
+  legalDocumentIds,
+} from "../features/legal/model/legal";
+import LandingPage from "../features/marketing/pages/LandingPage.vue";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -11,7 +15,7 @@ const router = createRouter({
     ...legalDocumentIds.map((id) => ({
       path: `/${id}`,
       name: id,
-      component: () => import("../pages/PrivacyPage.vue"),
+      component: () => import("../features/legal/pages/PrivacyPage.vue"),
     })),
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],

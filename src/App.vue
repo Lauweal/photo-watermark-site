@@ -2,11 +2,11 @@
 import { MotionConfig } from "motion-v";
 import { computed } from "vue";
 import { RouterLink, RouterView, useRoute } from "vue-router";
-import IconSymbols from "./components/IconSymbols.vue";
+import IconSymbols from "./components/ui/IconSymbols.vue";
 import SiteHeader from "./components/SiteHeader.vue";
 import SiteFooter from "./components/SiteFooter.vue";
 import { useI18n } from "./i18n";
-import { isLegalDocumentId, legalCopy } from "./lib/legal";
+import { isLegalDocumentId, legalCopy } from "./features/legal/model/legal";
 const route = useRoute();
 const { locale, messages } = useI18n();
 const page = computed(() => (isLegalDocumentId(route.name) ? "legal" : "home"));

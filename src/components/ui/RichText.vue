@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import type { Inline } from "../i18n/types";
+import type { Inline } from "../../i18n/types";
 
 defineProps<{ content: Inline[] }>();
 </script>

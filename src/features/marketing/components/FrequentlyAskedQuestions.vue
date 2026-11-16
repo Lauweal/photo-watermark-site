@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import MotionTextLink from "./MotionTextLink.vue";
-import RichText from "./RichText.vue";
+import MotionTextLink from "../../../components/MotionTextLink.vue";
+import RichText from "../../../components/ui/RichText.vue";
 import { reactive } from "vue";
 import { AnimatePresence, motion } from "motion-v";
-import { useSiteMotion } from "../composables/useSiteMotion.js";
-import { useI18n } from "../i18n";
-import { legalContactEmail } from "../lib/legal";
+import { useSiteMotion } from "../../../composables/useSiteMotion.js";
+import { useI18n } from "../../../i18n";
+import { legalContactEmail } from "../../legal/model/legal";
 
 const { messages } = useI18n();
 const opened = reactive(new Set<number>());

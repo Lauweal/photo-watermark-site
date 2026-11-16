@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { motion } from "motion-v";
-import { asset } from "../lib/assets";
-import { useSiteMotion } from "../composables/useSiteMotion";
-import { useI18n } from "../i18n";
+import { asset } from "../../../lib/assets";
+import { useSiteMotion } from "../../../composables/useSiteMotion";
+import { useI18n } from "../../../i18n";
 
 const { messages } = useI18n();
 const { reducedMotion, transition } = useSiteMotion();
@@ -37,19 +37,10 @@ const typeSpecimens = [
 const scriptMarks = ["中文", "繁體", "日本語", "한국어", "English"];
 
 /** Thumbnails used to suggest editing a batch of photos at once. */
-const batchPhotos = [
-  "classic.jpg",
-  "postage-stamp.jpg",
-  "minimal-camera.jpg",
-];
+const batchPhotos = ["classic.jpg", "postage-stamp.jpg", "minimal-camera.jpg"];
 
 type TileId =
-  | "logos"
-  | "typography"
-  | "invert"
-  | "batch"
-  | "export"
-  | "languages";
+  "logos" | "typography" | "invert" | "batch" | "export" | "languages";
 
 const capabilityOrder: TileId[] = [
   "logos",
@@ -197,7 +188,11 @@ watch(targets, () => {
             </li>
           </ul>
 
-          <div v-else-if="id === 'typography'" class="type-specimens" aria-hidden="true">
+          <div
+            v-else-if="id === 'typography'"
+            class="type-specimens"
+            aria-hidden="true"
+          >
             <span
               v-for="specimen in typeSpecimens"
               :key="specimen.id"
@@ -206,12 +201,20 @@ watch(targets, () => {
             >
           </div>
 
-          <div v-else-if="id === 'invert'" class="invert-swatches" aria-hidden="true">
+          <div
+            v-else-if="id === 'invert'"
+            class="invert-swatches"
+            aria-hidden="true"
+          >
             <span class="invert-swatch is-paper">Aa</span>
             <span class="invert-swatch is-ink">Aa</span>
           </div>
 
-          <div v-else-if="id === 'batch'" class="batch-stack" aria-hidden="true">
+          <div
+            v-else-if="id === 'batch'"
+            class="batch-stack"
+            aria-hidden="true"
+          >
             <img
               v-for="file in batchPhotos"
               :key="file"
@@ -223,7 +226,11 @@ watch(targets, () => {
             />
           </div>
 
-          <div v-else-if="id === 'export'" class="export-readout" aria-hidden="true">
+          <div
+            v-else-if="id === 'export'"
+            class="export-readout"
+            aria-hidden="true"
+          >
             <span class="export-value">2048<small>px</small></span>
             <span class="export-format">JPEG</span>
           </div>

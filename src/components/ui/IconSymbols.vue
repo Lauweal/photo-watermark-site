@@ -29,7 +29,9 @@
       </symbol>
       <symbol id="icon-globe" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="9" />
-        <path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18" />
+        <path
+          d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"
+        />
       </symbol>
       <symbol id="icon-chevron" viewBox="0 0 24 24">
         <path d="m6 9 6 6 6-6" />

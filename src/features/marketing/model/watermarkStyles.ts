@@ -1,4 +1,4 @@
-import type { StyleId } from "../i18n/types";
+import type { StyleId } from "../../../i18n/types";
 
 export type StyleTier = "basic" | "pro";
 

@@ -3,7 +3,11 @@ import { asset } from "../lib/assets";
 import { RouterLink } from "vue-router";
 import { useI18n } from "../i18n";
 import { computed } from "vue";
-import { legalContactEmail, legalCopy, legalDocumentIds } from "../lib/legal";
+import {
+  legalContactEmail,
+  legalCopy,
+  legalDocumentIds,
+} from "../features/legal/model/legal";
 withDefaults(defineProps<{ page?: "home" | "legal" }>(), { page: "home" });
 const { locale, messages } = useI18n();
 const copy = computed(() => legalCopy[locale.value]);

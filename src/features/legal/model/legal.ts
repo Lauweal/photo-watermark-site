@@ -1,8 +1,8 @@
-import documents from "../data/legal-documents.generated.json";
-import readingCopy from "../data/legal-copy.generated.json";
-import { legalBundleLoaders } from "../data/legal-locales.generated";
-import type { LegalBundle } from "../../../src/features/legal/types";
-import type { Inline, Locale } from "../i18n/types";
+import documents from "../../../data/legal-documents.generated.json";
+import readingCopy from "../../../data/legal-copy.generated.json";
+import { legalBundleLoaders } from "../../../data/legal-locales.generated.ts";
+import type { LegalBundle } from "../../../../../src/features/legal/types";
+import type { Inline, Locale } from "../../../i18n/types";
 
 export type LegalDocumentId = keyof typeof documents;
 export const legalDocumentIds = [
@@ -138,7 +138,8 @@ export function legalInline(text: string): Inline[] {
     } else {
       const href = match[0].replace(/[.,;:!?؛،।॥。；，、）)\]}]+$/u, "");
       parts.push({ link: href, href, external: true });
-      if (href.length < match[0].length) parts.push(match[0].slice(href.length));
+      if (href.length < match[0].length)
+        parts.push(match[0].slice(href.length));
     }
     cursor = match.index + match[0].length;
   }

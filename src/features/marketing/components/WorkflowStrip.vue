@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { motion } from "motion-v";
-import { useSiteMotion } from "../composables/useSiteMotion";
-import { useI18n } from "../i18n";
+import { useSiteMotion } from "../../../composables/useSiteMotion";
+import { useI18n } from "../../../i18n";
 
 const { messages } = useI18n();
 const { reducedMotion, transition } = useSiteMotion();

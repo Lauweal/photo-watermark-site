@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, shallowRef, watch } from "vue";
 import { RouterLink, useRoute } from "vue-router";
-import RichText from "../components/RichText.vue";
-import { useI18n } from "../i18n";
+import RichText from "../../../components/ui/RichText.vue";
+import { useI18n } from "../../../i18n";
 import {
   isLegalDocumentId,
   legalBlocks,
@@ -10,8 +10,8 @@ import {
   legalCopy,
   legalReadingCopy,
   getWebLegalBundle,
-} from "../lib/legal";
-import type { LegalBundle } from "../../../src/features/legal/types";
+} from "../model/legal";
+import type { LegalBundle } from "../../../../../src/features/legal/types";
 
 const route = useRoute();
 const { locale } = useI18n();
@@ -20,25 +20,35 @@ const documentId = computed(() =>
   isLegalDocumentId(route.name) ? route.name : "privacy",
 );
 const readingMode = ref({ locale: locale.value, original: false });
-const showOriginal = computed(() => readingMode.value.locale === locale.value && readingMode.value.original);
-const contentLanguage = computed(() => showOriginal.value ? "zh-Hans" : locale.value);
+const showOriginal = computed(
+  () => readingMode.value.locale === locale.value && readingMode.value.original,
+);
+const contentLanguage = computed(() =>
+  showOriginal.value ? "zh-Hans" : locale.value,
+);
 const bundle = shallowRef<LegalBundle>();
 const loadFailed = ref(false);
 const retryCount = ref(0);
 const readingCopy = computed(() => legalReadingCopy[locale.value]);
 const document = computed(() => bundle.value?.documents[documentId.value]);
-watch([contentLanguage, retryCount], async ([language], _previous, onCleanup) => {
-  let cancelled = false;
-  onCleanup(() => { cancelled = true; });
-  bundle.value = undefined;
-  loadFailed.value = false;
-  try {
-    const nextBundle = await getWebLegalBundle(language);
-    if (!cancelled) bundle.value = nextBundle;
-  } catch {
-    if (!cancelled) loadFailed.value = true;
-  }
-}, { immediate: true });
+watch(
+  [contentLanguage, retryCount],
+  async ([language], _previous, onCleanup) => {
+    let cancelled = false;
+    onCleanup(() => {
+      cancelled = true;
+    });
+    bundle.value = undefined;
+    loadFailed.value = false;
+    try {
+      const nextBundle = await getWebLegalBundle(language);
+      if (!cancelled) bundle.value = nextBundle;
+    } catch {
+      if (!cancelled) loadFailed.value = true;
+    }
+  },
+  { immediate: true },
+);
 const sections = computed(() =>
   (document.value?.sections ?? []).map((section, index) => ({
     ...section,
@@ -46,11 +56,17 @@ const sections = computed(() =>
     blocks: legalBlocks(section.body),
   })),
 );
-watch(sections, () => {
-  if (route.hash) {
-    window.document.getElementById(route.hash.slice(1))?.scrollIntoView({ block: "start" });
-  }
-}, { flush: "post" });
+watch(
+  sections,
+  () => {
+    if (route.hash) {
+      window.document
+        .getElementById(route.hash.slice(1))
+        ?.scrollIntoView({ block: "start" });
+    }
+  },
+  { flush: "post" },
+);
 const pageRoot = ref<HTMLElement>();
 const activeSection = ref("section-0");
 let observer: IntersectionObserver | undefined;
@@ -86,13 +102,23 @@ onBeforeUnmount(() => observer?.disconnect());
     <div class="legal-intro">
       <p class="section-kicker">{{ copy.kicker }}</p>
       <h1 :lang="contentLanguage">{{ document.title }}</h1>
-      <p>{{ showOriginal || locale === "zh-Hans" ? readingCopy.originalNotice : readingCopy.notice }}</p>
+      <p>
+        {{
+          showOriginal || locale === "zh-Hans"
+            ? readingCopy.originalNotice
+            : readingCopy.notice
+        }}
+      </p>
       <button
         v-if="locale !== 'zh-Hans'"
         class="legal-source-toggle"
         type="button"
         @click="readingMode = { locale, original: !showOriginal }"
-      >{{ showOriginal ? readingCopy.showTranslation : readingCopy.showOriginal }}</button>
+      >
+        {{
+          showOriginal ? readingCopy.showTranslation : readingCopy.showOriginal
+        }}
+      </button>
     </div>
     <div class="legal-layout">
       <aside class="legal-toc" :aria-label="copy.toc">
@@ -114,7 +140,11 @@ onBeforeUnmount(() => observer?.disconnect());
           <a :href="`mailto:${legalContactEmail}`">{{ legalContactEmail }}</a>
         </div>
       </aside>
-      <article id="policy" class="legal-article legal-source" :lang="contentLanguage">
+      <article
+        id="policy"
+        class="legal-article legal-source"
+        :lang="contentLanguage"
+      >
         <section
           v-for="section in sections"
           :id="section.id"
@@ -138,7 +168,13 @@ onBeforeUnmount(() => observer?.disconnect());
   <main v-else class="page-width legal-intro" :aria-busy="!loadFailed">
     <template v-if="loadFailed">
       <p role="alert">{{ copy.loadError }}</p>
-      <button class="legal-source-toggle" type="button" @click="retryCount += 1">{{ copy.retry }}</button>
+      <button
+        class="legal-source-toggle"
+        type="button"
+        @click="retryCount += 1"
+      >
+        {{ copy.retry }}
+      </button>
     </template>
   </main>
 </template>
