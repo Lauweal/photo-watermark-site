@@ -93,11 +93,11 @@ const {
               <motion.img
                 :variants="{
                   rest: { scale: 1, rotate: 0 },
-                  hovered: { scale: 1.055, rotate: -2 },
+                  hovered: { scale: 1.025, rotate: 0 },
                 }"
                 :transition="{
                   ...transition,
-                  duration: reducedMotion ? 0 : 0.6,
+                  duration: reducedMotion ? 0 : 0.36,
                 }"
                 :src="asset(style.file)"
                 :width="style.width"
