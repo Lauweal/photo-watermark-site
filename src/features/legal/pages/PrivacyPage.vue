@@ -11,7 +11,7 @@ import {
   legalReadingCopy,
   getWebLegalBundle,
 } from "../model/legal";
-import type { LegalBundle } from "../../../../../src/features/legal/types";
+import type { LegalBundle } from "../types";
 
 const route = useRoute();
 const { locale } = useI18n();

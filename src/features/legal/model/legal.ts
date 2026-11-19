@@ -1,7 +1,7 @@
 import documents from "../../../data/legal-documents.generated.json";
 import readingCopy from "../../../data/legal-copy.generated.json";
 import { legalBundleLoaders } from "../../../data/legal-locales.generated.ts";
-import type { LegalBundle } from "../../../../../src/features/legal/types";
+import type { LegalBundle } from "../types";
 import type { Inline, Locale } from "../../../i18n/types";
 
 export type LegalDocumentId = keyof typeof documents;
